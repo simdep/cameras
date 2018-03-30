@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<skipper version="3.2.10.1370" mvc="Symfony3" orm="Doctrine2" name="camera" uuid="282aeea0-3b1e-44d1-ab36-49059b9a9bcf">
+  <module name="\MainBundle" local-name="MainBundle" namespace="\" uuid="e9d8db7d-1b77-46b2-8e52-a6c62e08ca33">
+    <entity name="\Passage" local-name="Passage" namespace="\" uuid="bc383259-8d3b-4234-bb12-2b019e81cfa7">
+      <field name="id" type="integer" required="true" unique="true" primary="true" auto-increment="true" uuid="5ae8fb19-fdfd-4bb6-a541-a5aa72a1b541"/>
+      <field name="camera_id" type="integer" required="true" uuid="dbb7bb70-4498-41e1-8749-131a4d4a986a"/>
+      <field name="created" description="T" type="datetime" required="true" uuid="f6d2d4a1-7792-4e01-b096-7aaf653c95dd"/>
+      <field name="increment" description="A" type="integer" required="true" uuid="3feaf54e-961c-44cd-9fa7-4c64d19dd613"/>
+      <field name="s" description="S" type="integer" default="0" required="true" uuid="07db8207-a40c-49b8-a0e1-d0f57409ead3"/>
+      <field name="immatriculation" description="P" type="string" size="32" required="true" uuid="056d6775-9ca6-4dd9-8444-cd11425c8247"/>
+      <field name="immat" description="p" type="string" size="32" required="true" uuid="3574acd3-b201-4097-8d5e-168c0a24c839"/>
+      <field name="r" description="R" type="integer" required="true" uuid="0f7c230f-8e3b-4ea7-8b17-4f10fdade8f6"/>
+      <field name="fiability" description="f" type="smallint" required="true" unsigned="true" uuid="cd19c660-3165-4a07-91bc-d1113a51ff3f"/>
+      <field name="coord" description="Coordonn&#xE9;es (c)" type="string" uuid="ac7178db-c657-41f8-84de-528469c47142"/>
+      <field name="h" description="H" type="smallint" required="true" uuid="600fc188-87c8-43bf-bde2-4a95b1a5fe71"/>
+      <field name="state" description="Pays (N)" type="string" size="8" uuid="d4f5e0a5-b403-4b9f-80ce-f0c064c39fd4"/>
+    </entity>
+    <association from="\Passage" to="\Entity\Camera" caption="Camera Passage" owner-alias="passages" inverse-alias="camera" many-owner="true" many-inverse="false" parent-required="true" uuid="596f8905-be1e-4968-b26a-c132cac3d9b3">
+      <association-field from="camera_id" to="id"/>
+    </association>
+    <entity name="\Entity\Camera" local-name="Camera" namespace="\Entity" local-namespace="Entity" uuid="d663b85d-0444-4b40-bcf8-c9d95b283af8">
+      <field name="id" type="integer" required="true" unique="true" primary="true" auto-increment="true" uuid="7a084e28-6bd1-4554-94e3-c55320899716"/>
+      <field name="type" description="type" type="string" size="8" uuid="e49ee565-68a7-4806-8f59-f71ae711b12d"/>
+      <field name="serialNumber" description="SN" type="string" size="32" uuid="3021861a-41c0-4d72-b8d9-d1f749626853"/>
+      <field name="name" description="B" type="string" size="16" uuid="102de216-08d7-4ca1-b81d-b2a538dee68f"/>
+      <orm-attributes>
+        <attribute name="table">te_camera</attribute>
+      </orm-attributes>
+    </entity>
+  </module>
+  <visual-data>
+    <association uuid="596f8905-be1e-4968-b26a-c132cac3d9b3" caption1-position-x="0" caption1-position-y="0" center-position-x="0" center-position-y="0" color="#969696"/>
+    <entity uuid="bc383259-8d3b-4234-bb12-2b019e81cfa7" bg-color="#FFFFFF" hdr-color="#D2D2D2" position-x="322" position-y="102" size-x="0" size-x2="136" size-y="0" size-y2="143"/>
+    <entity uuid="d663b85d-0444-4b40-bcf8-c9d95b283af8" bg-color="#FFFFFF" hdr-color="#D2D2D2" position-x="34" position-y="55" size-x="0" size-x2="128" size-y="0" size-y2="73"/>
+    <module uuid="e9d8db7d-1b77-46b2-8e52-a6c62e08ca33" bg-color="#E7F5FD" position-x="61" position-y="72" size-x="11" size-x2="770" size-y="22" size-y2="501"/>
+    <project uuid="282aeea0-3b1e-44d1-ab36-49059b9a9bcf" size-x="0" size-x2="901" size-y="0" size-y2="617"/>
+  </visual-data>
+</skipper>
