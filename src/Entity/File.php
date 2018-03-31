@@ -16,6 +16,7 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -47,7 +48,7 @@ class File
      *
      * @ORM\Column(type="string", nullable=false, options={"default":"."})
      *
-     * @var int
+     * @var string
      */
     private $directory;
 
@@ -77,4 +78,104 @@ class File
      * @var Passage[]
      */
     private $passages;
+
+    /**
+     * File constructor.
+     */
+    public function __construct()
+    {
+        $this->passages = new ArrayCollection();
+    }
+
+    /**
+     * Retourne l'identifiant primaire de ce fichier dans la base de données.
+     *
+     * @return int
+     */
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
+    /**
+     * Récupère le répertoire de ce fichier.
+     *
+     * @return string
+     */
+    public function getDirectory(): string
+    {
+        return $this->directory;
+    }
+
+    /**
+     * Récupère le nom du fichier.
+     *
+     * @return string
+     */
+    public function getFilename(): string
+    {
+        return $this->filename;
+    }
+
+    /**
+     * Récupère le code md5 de ce fichier.
+     *
+     * @return string
+     */
+    public function getMd5sum(): string
+    {
+        return $this->md5sum;
+    }
+
+    /**
+     * Liste les passages associés à ce fichier.
+     *
+     * @return Passage[]
+     */
+    public function getPassages(): array
+    {
+        return $this->passages;
+    }
+
+    /**
+     * Définit le répertoire relatif de stockage du fichier.
+     *
+     * @param string $directory
+     *
+     * @return File
+     */
+    public function setDirectory(string $directory): File
+    {
+        $this->directory = $directory;
+
+        return $this;
+    }
+
+    /**
+     * Définit le nom du fichier.
+     *
+     * @param string $filename
+     *
+     * @return File
+     */
+    public function setFilename(string $filename): File
+    {
+        $this->filename = $filename;
+
+        return $this;
+    }
+
+    /**
+     * Définit le code MD5 du fichier en fonction de son contenu.
+     *
+     * @param string $md5sum
+     *
+     * @return File
+     */
+    public function setMd5sum(string $md5sum): File
+    {
+        $this->md5sum = $md5sum;
+
+        return $this;
+    }
 }

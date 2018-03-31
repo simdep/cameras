@@ -43,7 +43,7 @@ class Version20180331105900 extends AbstractMigration
         $this->addSql('CREATE SEQUENCE data.te_camera_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
         $this->addSql('CREATE SEQUENCE data.te_file_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
         $this->addSql('CREATE SEQUENCE data.te_passage_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
-        $this->addSql('CREATE TABLE data.te_camera (id INT NOT NULL, type VARCHAR(8) DEFAULT NULL, serial_number VARCHAR(32) DEFAULT NULL, name VARCHAR(64) DEFAULT NULL, active BOOLEAN DEFAULT \'true\' NOT NULL, code VARCHAR(16) NOT NULL, ip_router VARCHAR(15) NOT NULL, ip_camera VARCHAR(15) DEFAULT NULL, masque SMALLINT DEFAULT 29 NOT NULL, PRIMARY KEY(id))');
+        $this->addSql('CREATE TABLE data.te_camera (id INT NOT NULL, type VARCHAR(8) DEFAULT NULL, serial_number VARCHAR(32) DEFAULT NULL, name VARCHAR(64) DEFAULT NULL, active BOOLEAN DEFAULT \'true\' NOT NULL, code VARCHAR(16) NOT NULL, ip_router VARCHAR(15) NOT NULL, ip_camera VARCHAR(15) DEFAULT NULL, masque SMALLINT DEFAULT 29 NOT NULL, test BOOLEAN DEFAULT false, PRIMARY KEY(id))');
         $this->addSql('CREATE INDEX ndx_camera_active ON data.te_camera (active)');
         $this->addSql('CREATE TABLE data.te_file (id INT NOT NULL, directory VARCHAR(255) DEFAULT \'.\' NOT NULL, filename VARCHAR(16) NOT NULL, md5sum VARCHAR(32) NOT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE INDEX ndx_file_md5_sum ON data.te_file (md5sum)');

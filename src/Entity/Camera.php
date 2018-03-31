@@ -16,6 +16,7 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -116,6 +117,17 @@ class Camera
     private $masque = 29;
 
     /**
+     * Indicateur sur le statut de la caméra.
+     *
+     * À vrai, cet indicateur indique qu'il s'agit d'une caméra de test et que les données ne sont pas à prendre en compte.
+     *
+     * @ORM\Column(type="boolean", nullable=false, options={"default":false})
+     *
+     * @var bool
+     */
+    private $test;
+
+    /**
      * Passages enregistrés par la caméra.
      *
      * @ORM\OneToMany(targetEntity="App\Entity\Passage", mappedBy="camera")
@@ -123,6 +135,14 @@ class Camera
      * @var Passage[]
      */
     private $passages;
+
+    /**
+     * Camera constructor.
+     */
+    public function __construct()
+    {
+        $this->passages = new ArrayCollection();
+    }
 
     /**
      * @return int
@@ -141,6 +161,8 @@ class Camera
     }
 
     /**
+     * Retourne le numéro de série de la caméra.
+     *
      * @return string
      */
     public function getSerialNumber(): string
@@ -149,6 +171,8 @@ class Camera
     }
 
     /**
+     * Retourne le nom de la caméra.
+     *
      * @return string
      */
     public function getName(): string
@@ -157,14 +181,8 @@ class Camera
     }
 
     /**
-     * @return bool
-     */
-    public function isActive(): bool
-    {
-        return $this->active;
-    }
-
-    /**
+     * Retourne le code de la caméra.
+     *
      * @return string
      */
     public function getCode(): string
@@ -173,6 +191,8 @@ class Camera
     }
 
     /**
+     * Retourne l'adresse IP du routeur devant la caméra.
+     *
      * @return string
      */
     public function getIpRouter(): string
@@ -181,6 +201,8 @@ class Camera
     }
 
     /**
+     * Retourne l'adresse IP de la caméra.
+     *
      * @return string
      */
     public function getIpCamera(): string
@@ -189,6 +211,8 @@ class Camera
     }
 
     /**
+     * Retourne le masque du réseau de cette caméra.
+     *
      * @return int
      */
     public function getMasque(): int
@@ -197,6 +221,8 @@ class Camera
     }
 
     /**
+     * Retourne les passages enregistrés par cette caméra.
+     *
      * @return Passage[]
      */
     public function getPassages(): array
@@ -205,6 +231,32 @@ class Camera
     }
 
     /**
+     * Est-ce que la caméra est active ?
+     *
+     * Une caméra active est interrogée par l'importateur.
+     *
+     * @return bool
+     */
+    public function isActive(): bool
+    {
+        return $this->active;
+    }
+
+    /**
+     * Est-ce qu'il s'agit d'une caméra de test ?
+     *
+     * Les passages d'une caméra de tests sont sensés à être des données fictives à ne pas étudier.
+     *
+     * @return bool
+     */
+    public function isTest(): bool
+    {
+        return $this->test;
+    }
+
+    /**
+     * Définit le type de la caméra.
+     *
      * @param string $type
      *
      * @return Camera
@@ -217,6 +269,8 @@ class Camera
     }
 
     /**
+     * Définit le numéro de série de la caméra.
+     *
      * @param string $serialNumber
      *
      * @return Camera
@@ -229,6 +283,8 @@ class Camera
     }
 
     /**
+     * Définit le nom de la caméra.
+     *
      * @param string $name
      *
      * @return Camera
@@ -241,6 +297,10 @@ class Camera
     }
 
     /**
+     * Déclare la caméra active ou inactive.
+     *
+     * Une caméra active est interrogée par l'importateur.
+     *
      * @param bool $active
      *
      * @return Camera
@@ -253,6 +313,8 @@ class Camera
     }
 
     /**
+     * Définit le code unique de la caméra.
+     *
      * @param string $code
      *
      * @return Camera
@@ -265,6 +327,8 @@ class Camera
     }
 
     /**
+     * Définit l'adresse IP du routeur devant la caméra.
+     *
      * @param string $ip_router
      *
      * @return Camera
@@ -277,6 +341,8 @@ class Camera
     }
 
     /**
+     * Définit l'adresse IP de la caméra.
+     *
      * @param string $ip_camera
      *
      * @return Camera
@@ -289,6 +355,8 @@ class Camera
     }
 
     /**
+     * Définit le masque du réseau de la caméra.
+     *
      * @param int $masque
      *
      * @return Camera
@@ -296,6 +364,20 @@ class Camera
     public function setMasque(int $masque): Camera
     {
         $this->masque = $masque;
+
+        return $this;
+    }
+
+    /**
+     * Positionne l'indicateur de test à vrai ou faux.
+     *
+     * @param bool $test
+     *
+     * @return Camera
+     */
+    public function setTest(bool $test): Camera
+    {
+        $this->test = $test;
 
         return $this;
     }

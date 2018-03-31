@@ -194,6 +194,16 @@ class CameraFixtures extends Fixture
         $camera->setType('reco');
         $manager->persist($camera);
 
+        $camera = new Camera();
+        $camera->setActive(true);
+        $camera->setCode('TEST');
+        $camera->setIpCamera('172.22.42.151');
+        $camera->setMasque(20);
+        $camera->setName('Parking CEREMA');
+        $camera->setSerialNumber('');
+        $camera->setType('reco');
+        $manager->persist($camera);
+
         $manager->flush();
     }
 }
