@@ -146,19 +146,25 @@ class Camera
     }
 
     /**
+     * Retourne le répertoire où se trouvent les fichiers à télécharger.
+     *
+     * @return null|string
+     */
+    public function getDirectory(): ?string
+    {
+        if (null === $this->getIpCamera()) {
+            return null;
+        }
+
+        return "http://{$this->getIpCamera()}:8000/meci-L1/discr/output/";
+    }
+
+    /**
      * @return int
      */
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    /**
-     * @return string
-     */
-    public function getType(): ?string
-    {
-        return $this->type;
     }
 
     /**
@@ -169,6 +175,14 @@ class Camera
     public function getSerialNumber(): ?string
     {
         return $this->serialNumber;
+    }
+
+    /**
+     * @return string
+     */
+    public function getType(): ?string
+    {
+        return $this->type;
     }
 
     /**

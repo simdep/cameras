@@ -67,6 +67,7 @@ class CameraTest extends TestCase
     public function testConstructor()
     {
         self::assertNull($this->camera->getCode());
+        self::assertNull($this->camera->getDirectory());
         self::assertNull($this->camera->getId());
         self::assertNull($this->camera->getIpCamera());
         self::assertNull($this->camera->getIpRouter());
@@ -89,6 +90,9 @@ class CameraTest extends TestCase
 
         self::assertEquals($this->camera, $this->camera->setIpCamera($actual));
         self::assertEquals($expected, $this->camera->getIpCamera());
+
+        $expected = 'http://toto:8000/meci-L1/discr/output/';
+        self::assertEquals($expected, $this->camera->getDirectory());
     }
 
     /**
