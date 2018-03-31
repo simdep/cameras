@@ -14,6 +14,26 @@ use Doctrine\Common\Persistence\ObjectManager;
 
 class CameraFixtures extends Fixture
 {
+    /*
+     * Nombre de caméras après installation automatique.
+     */
+    const QUANTITE = 17;
+
+    /*
+     * Nombre de caméras actives après installation automatique.
+     */
+    const ACTIVES = 1;
+
+    /*
+     * Nombre de caméras inactives après installation automatique.
+     */
+    const INACTIVES = self::QUANTITE - self::ACTIVES;
+
+    /**
+     * Chargement des caméras.
+     *
+     * @param ObjectManager $manager
+     */
     public function load(ObjectManager $manager)
     {
         //Création de chacune des caméras

@@ -16,6 +16,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Camera;
 use Doctrine\ORM\EntityRepository;
 
 /**
@@ -23,4 +24,23 @@ use Doctrine\ORM\EntityRepository;
  */
 class CameraRepository extends EntityRepository
 {
+    /**
+     * Retourne les caméras actives.
+     *
+     * @return Camera[]
+     */
+    public function searchActive(): array
+    {
+        return $this->findBy(['active' => true]);
+    }
+
+    /**
+     * Retourne les caméras inactives.
+     *
+     * @return Camera[]
+     */
+    public function searchInactive(): array
+    {
+        return $this->findBy(['active' => false]);
+    }
 }
