@@ -13,6 +13,7 @@
  *
  * @see https://github.com/Alexandre-T/casguard/blob/master/LICENSE
  */
+
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
@@ -21,6 +22,12 @@ use Doctrine\ORM\Mapping as ORM;
  * Fichier importé et anonymisé récupéré sur la caméra par l'importateur.
  *
  * @ORM\Entity(repositoryClass="App\Repository\FileRepository")
+ * @ORM\Table(
+ *     name="te_file",
+ *     schema="data",
+ *     indexes={@ORM\Index(name="ndx_file_md5_sum", columns={"md5sum"})},
+ *     uniqueConstraints={@ORM\UniqueConstraint(name="ndx_file_name", columns={"directory","filename"})}
+ * )
  */
 class File
 {

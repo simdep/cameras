@@ -13,6 +13,7 @@
  *
  * @see https://github.com/Alexandre-T/casguard/blob/master/LICENSE
  */
+
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
@@ -21,6 +22,16 @@ use Doctrine\ORM\Mapping as ORM;
  * Passage anonymisé devant la caméra.
  *
  * @ORM\Entity(repositoryClass="App\Repository\PassageRepository")
+ * @ORM\Table(
+ *     name="te_passage",
+ *     schema="data",
+ *     indexes={
+ *         @ORM\Index(name="ndx_passage_immatriculation", columns={"immatriculation"}),
+ *         @ORM\Index(name="ndx_passage_immat", columns={"immat"}),
+ *         @ORM\Index(name="ndx_passage_fiability", columns={"fiability"}),
+ *         @ORM\Index(name="ndx_passage_fictive", columns={"data_fictive"})
+ *     }
+ * )
  */
 class Passage
 {
@@ -31,7 +42,7 @@ class Passage
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
      *
-     * @var integer
+     * @var int
      */
     private $id;
 
@@ -130,6 +141,11 @@ class Passage
      * @var string
      */
     private $state;
+
+    /**
+     * @ORM\Column(type="boolean", nullable=false, name="data_fictive", options={"default":false})
+     */
+    private $dataFictive;
 
     /**
      * Caméra ayant enregistré ce passage.

@@ -13,6 +13,7 @@
  *
  * @see https://github.com/Alexandre-T/casguard/blob/master/LICENSE
  */
+
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
@@ -21,7 +22,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Caméra.
  *
  * @ORM\Entity(repositoryClass="App\Repository\CameraRepository")
- * @ORM\Table(name="te_camera")
+ * @ORM\Table(name="te_camera", schema="data", indexes={@ORM\Index(name="ndx_camera_active", columns={"active"})})
  */
 class Camera
 {
@@ -205,81 +206,97 @@ class Camera
 
     /**
      * @param string $type
+     *
      * @return Camera
      */
     public function setType(string $type): Camera
     {
         $this->type = $type;
+
         return $this;
     }
 
     /**
      * @param string $serialNumber
+     *
      * @return Camera
      */
     public function setSerialNumber(string $serialNumber): Camera
     {
         $this->serialNumber = $serialNumber;
+
         return $this;
     }
 
     /**
      * @param string $name
+     *
      * @return Camera
      */
     public function setName(string $name): Camera
     {
         $this->name = $name;
+
         return $this;
     }
 
     /**
      * @param bool $active
+     *
      * @return Camera
      */
     public function setActive(bool $active): Camera
     {
         $this->active = $active;
+
         return $this;
     }
 
     /**
      * @param string $code
+     *
      * @return Camera
      */
     public function setCode(string $code): Camera
     {
         $this->code = $code;
+
         return $this;
     }
 
     /**
      * @param string $ip_router
+     *
      * @return Camera
      */
     public function setIpRouter(string $ip_router): Camera
     {
         $this->ip_router = $ip_router;
+
         return $this;
     }
 
     /**
      * @param string $ip_camera
+     *
      * @return Camera
      */
     public function setIpCamera(string $ip_camera): Camera
     {
         $this->ip_camera = $ip_camera;
+
         return $this;
     }
 
     /**
      * @param int $masque
+     *
      * @return Camera
      */
     public function setMasque(int $masque): Camera
     {
         $this->masque = $masque;
+
         return $this;
     }
 }
