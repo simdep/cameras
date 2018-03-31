@@ -17,6 +17,7 @@
 namespace App\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -75,7 +76,7 @@ class Camera
      *
      * @var bool
      */
-    private $active;
+    private $active = true;
 
     /**
      * Code de la caméra.
@@ -125,7 +126,7 @@ class Camera
      *
      * @var bool
      */
-    private $test;
+    private $test = false;
 
     /**
      * Passages enregistrés par la caméra.
@@ -147,7 +148,7 @@ class Camera
     /**
      * @return int
      */
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -155,7 +156,7 @@ class Camera
     /**
      * @return string
      */
-    public function getType(): string
+    public function getType(): ?string
     {
         return $this->type;
     }
@@ -165,7 +166,7 @@ class Camera
      *
      * @return string
      */
-    public function getSerialNumber(): string
+    public function getSerialNumber(): ?string
     {
         return $this->serialNumber;
     }
@@ -175,7 +176,7 @@ class Camera
      *
      * @return string
      */
-    public function getName(): string
+    public function getName(): ?string
     {
         return $this->name;
     }
@@ -185,7 +186,7 @@ class Camera
      *
      * @return string
      */
-    public function getCode(): string
+    public function getCode(): ?string
     {
         return $this->code;
     }
@@ -195,7 +196,7 @@ class Camera
      *
      * @return string
      */
-    public function getIpRouter(): string
+    public function getIpRouter(): ?string
     {
         return $this->ip_router;
     }
@@ -205,7 +206,7 @@ class Camera
      *
      * @return string
      */
-    public function getIpCamera(): string
+    public function getIpCamera(): ?string
     {
         return $this->ip_camera;
     }
@@ -215,7 +216,7 @@ class Camera
      *
      * @return int
      */
-    public function getMasque(): int
+    public function getMasque(): ?int
     {
         return $this->masque;
     }
@@ -223,9 +224,9 @@ class Camera
     /**
      * Retourne les passages enregistrés par cette caméra.
      *
-     * @return Passage[]
+     * @return Passage[]|Collection
      */
-    public function getPassages(): array
+    public function getPassages(): Collection
     {
         return $this->passages;
     }

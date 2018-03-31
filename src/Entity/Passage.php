@@ -176,7 +176,7 @@ class Passage
      *
      * @return int
      */
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -186,7 +186,7 @@ class Passage
      *
      * @return \DateTime
      */
-    public function getCreated(): \DateTime
+    public function getCreated(): ?\DateTime
     {
         return $this->created;
     }
@@ -196,7 +196,7 @@ class Passage
      *
      * @return int
      */
-    public function getIncrement(): int
+    public function getIncrement(): ?int
     {
         return $this->increment;
     }
@@ -206,7 +206,7 @@ class Passage
      *
      * @return int
      */
-    public function getS(): int
+    public function getS(): ?int
     {
         return $this->s;
     }
@@ -216,7 +216,7 @@ class Passage
      *
      * @return string
      */
-    public function getImmatriculation(): string
+    public function getImmatriculation(): ?string
     {
         return $this->immatriculation;
     }
@@ -226,7 +226,7 @@ class Passage
      *
      * @return string
      */
-    public function getImmat(): string
+    public function getImmat(): ?string
     {
         return $this->immat;
     }
@@ -236,7 +236,7 @@ class Passage
      *
      * @return int
      */
-    public function getR(): int
+    public function getR(): ?int
     {
         return $this->r;
     }
@@ -246,7 +246,7 @@ class Passage
      *
      * @return int
      */
-    public function getFiability(): int
+    public function getFiability(): ?int
     {
         return $this->fiability;
     }
@@ -256,7 +256,7 @@ class Passage
      *
      * @return string
      */
-    public function getCoord(): string
+    public function getCoord(): ?string
     {
         return $this->coord;
     }
@@ -266,7 +266,7 @@ class Passage
      *
      * @return int
      */
-    public function getH(): int
+    public function getH(): ?int
     {
         return $this->h;
     }
@@ -276,7 +276,7 @@ class Passage
      *
      * @return string
      */
-    public function getState(): string
+    public function getState(): ?string
     {
         return $this->state;
     }
@@ -286,7 +286,7 @@ class Passage
      *
      * @return Camera
      */
-    public function getCamera(): Camera
+    public function getCamera(): ?Camera
     {
         return $this->camera;
     }
@@ -296,7 +296,7 @@ class Passage
      *
      * @return File
      */
-    public function getFile(): File
+    public function getFile(): ?File
     {
         return $this->file;
     }
@@ -308,7 +308,7 @@ class Passage
      *
      * @return bool
      */
-    public function isDataFictive(): bool
+    public function isDataFictive(): ?bool
     {
         return $this->dataFictive;
     }

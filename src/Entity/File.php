@@ -17,6 +17,7 @@
 namespace App\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -92,7 +93,7 @@ class File
      *
      * @return int
      */
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -102,7 +103,7 @@ class File
      *
      * @return string
      */
-    public function getDirectory(): string
+    public function getDirectory(): ?string
     {
         return $this->directory;
     }
@@ -112,7 +113,7 @@ class File
      *
      * @return string
      */
-    public function getFilename(): string
+    public function getFilename(): ?string
     {
         return $this->filename;
     }
@@ -122,7 +123,7 @@ class File
      *
      * @return string
      */
-    public function getMd5sum(): string
+    public function getMd5sum(): ?string
     {
         return $this->md5sum;
     }
@@ -130,9 +131,9 @@ class File
     /**
      * Liste les passages associés à ce fichier.
      *
-     * @return Passage[]
+     * @return Passage[]|Collection
      */
-    public function getPassages(): array
+    public function getPassages(): Collection
     {
         return $this->passages;
     }
