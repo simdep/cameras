@@ -45,13 +45,13 @@ class DownloadUtils
         }
 
         $crawler = new Crawler($html);
-        $links = $crawler->filterXPath('//a[contains(@href,"'.self::REPERE.'")]')->each(function (Crawler $node, $i) {
+        $links = $crawler->filterXPath('//a[contains(@href,"' . self::REPERE . '")]')->each(function (Crawler $node, $i) {
             return $node->text();
         });
 
         $files = [];
         foreach ($links as $link) {
-            $files[$link] = $directory.$link;
+            $files[$link] = $directory . $link;
         }
 
         return $files;
@@ -69,20 +69,20 @@ class DownloadUtils
      */
     public function downloadFile(string $file, string $code): int
     {
-        $directory = __DIR__.'/../../data/downloaded/camera-'.$code;
-        $outputFilename = basename($file).'.csv';
-        $outputCompleteFilename = $directory.DIRECTORY_SEPARATOR.$outputFilename;
+        $directory = __DIR__ . '/../../data/downloaded/camera-' . $code;
+        $outputFilename = basename($file) . '.csv';
+        $outputCompleteFilename = $directory . DIRECTORY_SEPARATOR . $outputFilename;
 
         if (!is_dir($directory) && false === @mkdir($directory)) {
-            throw new DownloadException('Impossible de créer le répertoire '.$directory.' pour y télécharger les données anonymisées de la caméra');
+            throw new DownloadException('Impossible de créer le répertoire ' . $directory . ' pour y télécharger les données anonymisées de la caméra');
         }
 
         if (false === ($outputFile = @fopen($outputCompleteFilename, 'w+'))) {
-            throw new DownloadException('Impossible d’ouvrir le fichier '.$outputCompleteFilename.' pour y écrire les données à télécharger.');
+            throw new DownloadException('Impossible d’ouvrir le fichier ' . $outputCompleteFilename . ' pour y écrire les données à télécharger.');
         }
 
         if (false === ($inputFile = @fopen($file, 'r'))) {
-            throw new DownloadException('Impossible de lire le fichier distant '.$file);
+            throw new DownloadException('Impossible de lire le fichier distant ' . $file);
         }
 
         $row = 1;
@@ -90,11 +90,11 @@ class DownloadUtils
             if (1 == $row) {
                 //Première ligne j'aoute les entêtes
                 $line = $this->header($data);
-                fwrite($outputFile, implode("\t", $line)."\r\n");
+                fwrite($outputFile, implode("\t", $line) . "\r\n");
                 unset($line);
             }
-            $line = format($data);
-            fwrite($outputFile, implode("\t", $line)."\r\n");
+            $line = $this->format($data);
+            fwrite($outputFile, implode("\t", $line) . "\r\n");
             unset($line, $data);
             ++$row;
         }
@@ -123,6 +123,36 @@ class DownloadUtils
 
         if (count($data) !== count($resultat)) {
             throw new DownloadException('Erreur durant la création des entêtes : le nombre de colonne dans les données ne correspond pas au nombre de colonnes dans les résultats.');
+        }
+
+        return $resultat;
+    }
+
+    /**
+     * Formate les données.
+     *
+     * @param array $data
+     * @return array
+     */
+    private function format(array $data): array
+    {
+        $resultat = [];
+        $cryptage = 'sha1';
+
+        foreach ($data as $line) {
+            list($key, $value) = explode('=', $line);
+            switch ($key) {
+                case 'P':
+                case 'p':
+                    $resultat[$key] = $cryptage($value . 'un sel crystallisé');
+                    break;
+                default:
+                    $resultat[$key] = $value;
+            }
+        }
+
+        if (count($data) !== count($resultat)) {
+            die('error');
         }
 
         return $resultat;
