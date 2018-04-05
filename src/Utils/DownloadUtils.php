@@ -24,7 +24,7 @@ use Symfony\Component\DomCrawler\Crawler;
  */
 class DownloadUtils
 {
-    const EXTENSION = '.txt';
+    const REPERE = 'ucL1';
 
     /**
      * Ouvre un fichier distant, en récupère la liste de tous les fichiers disponibles.
@@ -45,7 +45,7 @@ class DownloadUtils
         }
 
         $crawler = new Crawler($html);
-        $links = $crawler->filterXPath('//a[contains(@href,"'.self::EXTENSION.'")]')->each(function (Crawler $node, $i) {
+        $links = $crawler->filterXPath('//a[contains(@href,"'.self::REPERE.'")]')->each(function (Crawler $node, $i) {
             return $node->text();
         });
 
@@ -70,7 +70,7 @@ class DownloadUtils
     public function downloadFile(string $file, string $code): int
     {
         $directory = __DIR__.'/../../data/downloaded/camera-'.$code;
-        $outputFilename = substr(basename($file), 0, -4).'.csv';
+        $outputFilename = basename($file).'.csv';
         $outputCompleteFilename = $directory.DIRECTORY_SEPARATOR.$outputFilename;
 
         if (!is_dir($directory) && false === @mkdir($directory)) {
