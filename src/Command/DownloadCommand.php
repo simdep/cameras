@@ -51,9 +51,8 @@ class DownloadCommand extends Command
     /**
      * DownloadCommand constructor.
      *
-     * @param ObjectManager          $manager
      * @param EntityManagerInterface $entityManager
-     * @param DownloadUtils          $downloader
+     * @param DownloadUtils $downloader
      */
     public function __construct(EntityManagerInterface $entityManager, DownloadUtils $downloader)
     {
