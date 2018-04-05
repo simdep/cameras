@@ -28,13 +28,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 class DownloadCommand extends Command
 {
     /**
-     * The object manager.
-     *
-     * @var ObjectManager
-     */
-    private $manager;
-
-    /**
      * The entity manager.
      *
      * @var EntityManagerInterface
@@ -49,18 +42,26 @@ class DownloadCommand extends Command
     private $repository;
 
     /**
+     * Downloader service.
+     *
+     * @var DownloadUtils
+     */
+    private $downloader;
+
+    /**
      * DownloadCommand constructor.
      *
      * @param ObjectManager          $manager
      * @param EntityManagerInterface $entityManager
+     * @param DownloadUtils          $downloader
      */
-    public function __construct(ObjectManager $manager, EntityManagerInterface $entityManager)
+    public function __construct(EntityManagerInterface $entityManager, DownloadUtils $downloader)
     {
         parent::__construct();
 
-        $this->manager = $manager;
         $this->entityManager = $entityManager;
         $this->repository = $entityManager->getRepository('App:Camera');
+        $this->downloader = $downloader;
     }
 
     /**
@@ -119,7 +120,7 @@ class DownloadCommand extends Command
             ]);
             //Try to retrieve an array of files to download
             try {
-                $files = DownloadUtils::getFiles($camera->getDirectory());
+                $files = $this->downloader->getFiles($camera->getDirectory());
             } catch (DownloadException $e) {
                 $output->writeln('Erreur à la lecture du répertoire : '.$e->getMessage());
                 continue;
@@ -129,11 +130,10 @@ class DownloadCommand extends Command
             foreach ($files as $key => $file) {
                 $output->writeln(sprintf('        Lecture du fichier « %s » de la caméra « %s »', $key, $camera->getName()));
                 try {
-                    $lines = DownloadUtils::downloadFile($file);
+                    $lines = $this->downloader->downloadFile($file, $camera->getCode());
                     $output->writeln(sprintf('           %s passages anonymisés et récupérées', $lines));
                 } catch (DownloadException $e) {
-                    $output->writeln('Erreur à la lecture du fichier : '.$e->getMessage());
-
+                    $output->writeln('Erreur : '.$e->getMessage());
                 }
             }
         }

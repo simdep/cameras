@@ -113,6 +113,9 @@
     "symfony/doctrine-bridge": {
         "version": "v4.0.6"
     },
+    "symfony/dom-crawler": {
+        "version": "v4.0.6"
+    },
     "symfony/dotenv": {
         "version": "v4.0.6"
     },

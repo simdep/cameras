@@ -45,7 +45,7 @@ class File
     private $id;
 
     /**
-     * Repertoire relatif à data/import de stockage des fichiers.
+     * Repertoire relatif à data/downloaded de stockage des fichiers.
      *
      * @ORM\Column(type="string", nullable=false, options={"default":"."})
      *

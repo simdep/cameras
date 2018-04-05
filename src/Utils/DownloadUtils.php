@@ -15,13 +15,17 @@
  */
 
 namespace App\Utils;
+
 use App\Exception\DownloadException;
+use Symfony\Component\DomCrawler\Crawler;
 
 /**
- * Outils pour faciliter le téléchargement
+ * Outils pour faciliter le téléchargement.
  */
 class DownloadUtils
 {
+    const EXTENSION = '.txt';
+
     /**
      * Ouvre un fichier distant, en récupère la liste de tous les fichiers disponibles.
      *
@@ -31,27 +35,96 @@ class DownloadUtils
      *
      * @throws DownloadException
      */
-    public static function getFiles(string $directory): array
+    public function getFiles(string $directory): array
     {
-        //FIXME implement it
-        return [
-            'toto' => 'url de toto',
-            'titi' => 'url de titi',
-        ];
+        //lecture du fichier
+        $html = @file_get_contents($directory);
+
+        if (false === $html) {
+            throw new DownloadException('Impossible de lire le contenu du répertoire d’archive de la caméra.');
+        }
+
+        $crawler = new Crawler($html);
+        $links = $crawler->filterXPath('//a[contains(@href,"'.self::EXTENSION.'")]')->each(function (Crawler $node, $i) {
+            return $node->text();
+        });
+
+        $files = [];
+        foreach ($links as $link) {
+            $files[$link] = $directory.$link;
+        }
+
+        return $files;
     }
 
     /**
      * Télécharge un fichier de passage et anonymise à la volée les plaques d'immatriculation.
      *
-     * @param $file
+     * @param string $file Fichier à télécharger
+     * @param string $code Code de la caméra
      *
      * @return int
      *
      * @throws DownloadException
      */
-    public static function downloadFile($file): int
+    public function downloadFile(string $file, string $code): int
     {
-        //FIXME implement it
-        return 42;
+        $directory = __DIR__.'/../../data/downloaded/camera-'.$code;
+        $outputFilename = substr(basename($file), 0, -4).'.csv';
+        $outputCompleteFilename = $directory.DIRECTORY_SEPARATOR.$outputFilename;
+
+        if (!is_dir($directory) && false === @mkdir($directory)) {
+            throw new DownloadException('Impossible de créer le répertoire '.$directory.' pour y télécharger les données anonymisées de la caméra');
+        }
+
+        if (false === ($outputFile = @fopen($outputCompleteFilename, 'w+'))) {
+            throw new DownloadException('Impossible d’ouvrir le fichier '.$outputCompleteFilename.' pour y écrire les données à télécharger.');
+        }
+
+        if (false === ($inputFile = @fopen($file, 'r'))) {
+            throw new DownloadException('Impossible de lire le fichier distant '.$file);
+        }
+
+        $row = 1;
+        while (false !== ($data = fgetcsv($inputFile, 0, "\t"))) {
+            if (1 == $row) {
+                //Première ligne j'aoute les entêtes
+                $line = $this->header($data);
+                fwrite($outputFile, implode("\t", $line)."\r\n");
+                unset($line);
+            }
+            $line = format($data);
+            fwrite($outputFile, implode("\t", $line)."\r\n");
+            unset($line, $data);
+            ++$row;
+        }
+        fclose($inputFile);
+        fclose($outputFile);
+
+        return $row;
+    }
+
+    /**
+     * Crée les entêtes du fichier CSV.
+     *
+     * @param array $data
+     *
+     * @return array
+     *
+     * @throws DownloadException
+     */
+    private function header(array $data): array
+    {
+        $resultat = [];
+        foreach ($data as $line) {
+            list($key) = explode('=', $line);
+            $resultat[] = $key;
+        }
+
+        if (count($data) !== count($resultat)) {
+            throw new DownloadException('Erreur durant la création des entêtes : le nombre de colonne dans les données ne correspond pas au nombre de colonnes dans les résultats.');
+        }
+
+        return $resultat;
     }
 }
