@@ -217,7 +217,7 @@ class CameraFixtures extends Fixture
         $camera = new Camera();
         $camera->setActive(true);
         $camera->setCode('TEST');
-        $camera->setIpCamera('172.22.42.151');
+        $camera->setIpCamera('172.22.42.122');
         $camera->setIpRouter('172.22.32.3');
         $camera->setMasque(20);
         $camera->setName('Parking CEREMA');
