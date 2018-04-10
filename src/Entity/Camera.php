@@ -160,6 +160,20 @@ class Camera
     }
 
     /**
+     * Retourne le répertoire où se trouvent les images à télécharger.
+     *
+     * @return null|string
+     */
+    public function getImageDirectory(): ?string
+    {
+        if (null === $this->getIpCamera()) {
+            return null;
+        }
+
+        return "http://{$this->getIpCamera()}:8000/meci-L1/discr/images/";
+    }
+
+    /**
      * @return int
      */
     public function getId(): ?int

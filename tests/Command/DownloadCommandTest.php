@@ -181,11 +181,11 @@ class DownloadCommandTest extends KernelTestCase
             ->expects(self::exactly(5))
             ->method('downloadFile')
             ->willReturn(
-                7,
-                9,
-                13,
-                23,
-                42
+                range(1, 7),
+                range(1, 9),
+                range(1, 13),
+                range(1, 23),
+                range(1, 42)
             );
 
         $command = $this->application->find('app:download');
@@ -197,7 +197,8 @@ class DownloadCommandTest extends KernelTestCase
             //'username' => 'Wouter',
 
             // prefix the key with two dashes when passing options,
-            // e.g: '--some-option' => 'option_value',
+            '--day' => 'all',
+            '--image' => 'false',
         ));
 
         // the output of the command in the console
@@ -210,9 +211,9 @@ class DownloadCommandTest extends KernelTestCase
         $this->assertContains('Interrogation de la caméra « Caméra 1 »', $output);
         $this->assertContains('Interrogation de la caméra « Caméra 2 »', $output);
         $this->assertContains('Interrogation de la caméra « Caméra 3 »', $output);
-        $this->assertContains('0 fichiers à télécharger', $output);
-        $this->assertContains('1 fichiers à télécharger', $output);
-        $this->assertContains('2 fichiers à télécharger', $output);
+        $this->assertContains('0 fichier(s) à télécharger', $output);
+        $this->assertContains('1 fichier(s) à télécharger', $output);
+        $this->assertContains('2 fichier(s) à télécharger', $output);
         $this->assertContains('Lecture du fichier « foo » de la caméra « Caméra 1 »', $output);
         $this->assertContains('Lecture du fichier « foo » de la caméra « Caméra 2 »', $output);
         $this->assertContains('Lecture du fichier « bar » de la caméra « Caméra 2 »', $output);
