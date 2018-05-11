@@ -21,12 +21,15 @@ use App\Repository\CameraRepository;
 use App\Utils\DownloadUtils;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Command\LockableTrait;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class DownloadCommand extends Command
 {
+    use LockableTrait;
+
     /**
      * The entity manager.
      *
@@ -99,6 +102,12 @@ class DownloadCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        if (!$this->lock()) {
+            $output->writeln('<error>The command is already running in another process.</error>');
+
+            return;
+        }
+
         // outputs multiple lines to the console (adding "\n" at the end of each line)
         $output->writeln([
             'Downloader lancé',
@@ -176,5 +185,9 @@ class DownloadCommand extends Command
             }
         }
         $output->writeln('Fin du processus.');
+
+        // if not released explicitly, Symfony releases the lock
+        // automatically when the execution of the command ends
+        $this->release();
     }
 }

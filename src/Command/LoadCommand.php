@@ -23,6 +23,7 @@ use App\Repository\FileRepository;
 use App\Utils\LoadUtils;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Command\LockableTrait;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -30,6 +31,8 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class LoadCommand extends Command
 {
+    use LockableTrait;
+
     /**
      * Nombre de colonnes.
      */
@@ -171,6 +174,11 @@ class LoadCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        if (!$this->lock()) {
+            $output->writeln('<error>The command is already running in another process.</error>');
+
+            return 0;
+        }
         // outputs multiple lines to the console (adding "\n" at the end of each line)
         $output->writeln([
             '<info>Loader lancé</info>',
@@ -334,5 +342,9 @@ class LoadCommand extends Command
             unset($directoryInfo, $directoryname);
         }
         $output->writeln('Fin du processus.');
+
+        // if not released explicitly, Symfony releases the lock
+        // automatically when the execution of the command ends
+        $this->release();
     }
 }
