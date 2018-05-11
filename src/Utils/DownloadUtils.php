@@ -176,7 +176,7 @@ class DownloadUtils
 
         $mydirectory = __DIR__."/../../data/downloaded/camera-$code/images/$subdirectory/";
 
-        if (!is_dir($mydirectory) && false === @mkdir($mydirectory, null, true)) {
+        if (!is_dir($mydirectory) && false === @mkdir($mydirectory, 0755, true)) {
             throw new DownloadException('Impossible de créer le répertoire '.$mydirectory.' pour y stocker les photos de la caméra');
         }
 
