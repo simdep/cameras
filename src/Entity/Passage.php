@@ -78,7 +78,7 @@ class Passage
      *
      * La plaque d'immatriculation est anonymisée via un algorithme de hachage après un salage de la plaque.
      *
-     * @ORM\Column(type="string", length=32, nullable=false)
+     * @ORM\Column(type="string", length=64, nullable=false)
      *
      * @var string
      */
@@ -89,7 +89,7 @@ class Passage
      *
      * La plaque d'immatriculation est anonymisée via un algorithme de hachage après un salage de la plaque.
      *
-     * @ORM\Column(type="string", length=32, nullable=false)
+     * @ORM\Column(type="string", length=64, nullable=false)
      *
      * @var string
      */
@@ -98,7 +98,7 @@ class Passage
     /**
      * Variable inconnue r.
      *
-     * @ORM\Column(type="integer", nullable=false)
+     * @ORM\Column(type="bigint", nullable=false)
      *
      * @var int
      */
@@ -136,7 +136,9 @@ class Passage
     /**
      * Pays visible sur la plaque d'immatriculation.
      *
-     * @ORM\Column(type="string", length=8, nullable=true)
+     * La longueur est importante, car dans certains cas, la caméra remonte plein de valeurs possibles.
+     *
+     * @ORM\Column(type="string", length=32, nullable=true)
      *
      * @var string
      */

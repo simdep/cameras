@@ -56,7 +56,7 @@ class File
     /**
      * Nom du fichier.
      *
-     * @ORM\Column(type="string", length=16, nullable=false)
+     * @ORM\Column(type="string", length=32, nullable=false)
      *
      * @var string
      */
