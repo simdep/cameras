@@ -21,4 +21,19 @@ namespace App\Utils;
  */
 class LoadUtils
 {
+    /**
+     * Compte le nombre de lignes d'un fichier csv transmis.
+     *
+     * @param \SplFileObject $fileObject
+     *
+     * @return int
+     */
+    public function getLines(\SplFileObject $fileObject): int
+    {
+        $fileObject->seek(PHP_INT_MAX);
+        $lignes = $fileObject->key();
+        $fileObject->rewind();
+
+        return $lignes;
+    }
 }

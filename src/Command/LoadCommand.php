@@ -23,6 +23,7 @@ use App\Repository\FileRepository;
 use App\Utils\LoadUtils;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -254,7 +255,6 @@ class LoadCommand extends Command
                         continue;
                     }
                 }
-                $output->write(sprintf('<comment>Fichier %s en cours de chargement.</comment> ', $fileInfo->getFilename()));
 
                 if ('f' === $input->getOption('transaction')) {
                     $this->entityManager->beginTransaction();
@@ -266,9 +266,18 @@ class LoadCommand extends Command
                 $fileEntity->setMd5sum($empreinte);
                 $this->entityManager->persist($fileEntity);
 
-                while (!$fileObject->eof()) {
-                    //TODO Ajouter une progressbar
-                    //https://symfony.com/doc/current/components/console/helpers/progressbar.html
+                $lignes = $this->loader->getLines($fileObject);
+                $output->write(sprintf('<comment>Fichier %s en cours de chargement (%d lignes).</comment> ', $fileInfo->getFilename(), $lignes));
+
+                //TODO Ajouter une progressbar
+                //https://symfony.com/doc/current/components/console/helpers/progressbar.html
+                // creates a new progress bar (50 units)
+                $progressBar = new ProgressBar($output, $lignes);
+                // starts and displays the progress bar
+                $progressBar->start();
+
+                while ($lignes > 0 && !$fileObject->eof()) {
+                    $progressBar->advance();
                     $csv = $fileObject->fgetcsv("\t");
                     if (empty($csv) || 1 === count($csv)) {
                         //fichier ou ligne vide
@@ -276,13 +285,11 @@ class LoadCommand extends Command
                     }
                     if (0 === $index) {
                         //On passe l’entête.
-                        $output->write('<info>H</info>');
                         ++$index;
                         continue;
                     }
                     if (self::COLUMN !== count($csv)) {
                         //On continue car on n'a pas le bon nombre de colonnes.
-                        $output->write('<error>C'.count($csv).'</error>');
                         continue;
                     }
 
@@ -307,9 +314,9 @@ class LoadCommand extends Command
                     unset($passage,$csv);
                 }
                 //Fermeture du fichier
-                unset($fileEntity, $fileObject, $empreinte);
-                $output->writeln('<info>Fin du fichier. Succès.</info>');
-                $output->writeln(sprintf('<comment>Mémoire consommée : %s</comment>', memory_get_usage()));
+                unset($fileEntity, $fileObject, $empreinte, $lignes);
+                $progressBar->finish();
+                $output->writeln("\n");
                 if ('f' === $input->getOption('transaction')) {
                     // Validation pour chaque fichier
                     $output->writeln('<info>Validation de la transaction.</info>');
