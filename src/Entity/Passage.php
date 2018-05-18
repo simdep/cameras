@@ -29,7 +29,9 @@ use Doctrine\ORM\Mapping as ORM;
  *         @ORM\Index(name="ndx_passage_immatriculation", columns={"immatriculation"}),
  *         @ORM\Index(name="ndx_passage_immat", columns={"immat"}),
  *         @ORM\Index(name="ndx_passage_fiability", columns={"fiability"}),
- *         @ORM\Index(name="ndx_passage_fictive", columns={"data_fictive"})
+ *         @ORM\Index(name="ndx_passage_fictive", columns={"data_fictive"}),
+ *         @ORM\Index(name="ndx_file_primary", columns={"file_id"}),
+ *         @ORM\Index(name="ndx_camera_primary", columns={"camera_id"})
  *     }
  * )
  */
