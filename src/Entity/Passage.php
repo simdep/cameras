@@ -17,6 +17,7 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use ApiPlatform\Core\Annotation\ApiResource;
 
 /**
  * Passage anonymisé devant la caméra.
@@ -34,6 +35,8 @@ use Doctrine\ORM\Mapping as ORM;
  *         @ORM\Index(name="ndx_camera_primary", columns={"camera_id"})
  *     }
  * )
+ *
+ * @ApiResource
  */
 class Passage
 {

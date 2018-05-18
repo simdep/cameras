@@ -19,6 +19,7 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use ApiPlatform\Core\Annotation\ApiResource;
 
 /**
  * Fichier importé et anonymisé récupéré sur la caméra par l'importateur.
@@ -30,6 +31,8 @@ use Doctrine\ORM\Mapping as ORM;
  *     indexes={@ORM\Index(name="ndx_file_md5_sum", columns={"md5sum"})},
  *     uniqueConstraints={@ORM\UniqueConstraint(name="ndx_file_name", columns={"directory","filename"})}
  * )
+ *
+ * @ApiResource
  */
 class File
 {
