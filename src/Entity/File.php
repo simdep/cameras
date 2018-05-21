@@ -32,7 +32,10 @@ use ApiPlatform\Core\Annotation\ApiResource;
  *     uniqueConstraints={@ORM\UniqueConstraint(name="ndx_file_name", columns={"directory","filename"})}
  * )
  *
- * @ApiResource
+ * @ApiResource(
+ *     collectionOperations={"get"},
+ *     itemOperations={"get","delete"}
+ * )
  */
 class File
 {

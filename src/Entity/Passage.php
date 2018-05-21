@@ -36,7 +36,10 @@ use ApiPlatform\Core\Annotation\ApiResource;
  *     }
  * )
  *
- * @ApiResource
+ * @ApiResource(
+ *     collectionOperations={"get"},
+ *     itemOperations={"get"}
+ * )
  */
 class Passage
 {
