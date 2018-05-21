@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "cd1fb432b80fa78c85a4e7a23733e5fe",
+    "content-hash": "a85ec980b02f79248da03b5b8d9cec87",
     "packages": [
         {
             "name": "api-platform/api-pack",
@@ -1253,16 +1253,16 @@
         },
         {
             "name": "nelmio/cors-bundle",
-            "version": "1.5.4",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nelmio/NelmioCorsBundle.git",
-                "reference": "548dc8ebd3984acd2f6d8787ab1dac2e9aa14254"
+                "reference": "4243c60a96f8b95d5f42a3e65b33a3eebc511491"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nelmio/NelmioCorsBundle/zipball/548dc8ebd3984acd2f6d8787ab1dac2e9aa14254",
-                "reference": "548dc8ebd3984acd2f6d8787ab1dac2e9aa14254",
+                "url": "https://api.github.com/repos/nelmio/NelmioCorsBundle/zipball/4243c60a96f8b95d5f42a3e65b33a3eebc511491",
+                "reference": "4243c60a96f8b95d5f42a3e65b33a3eebc511491",
                 "shasum": ""
             },
             "require": {
@@ -1307,7 +1307,7 @@
                 "cors",
                 "crossdomain"
             ],
-            "time": "2017-12-11T18:41:54+00:00"
+            "time": "2018-02-08T11:00:00+00:00"
         },
         {
             "name": "ocramius/package-versions",
@@ -4504,6 +4504,7 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
+        "nelmio/cors-bundle": 20,
         "symfony/lts": 20
     },
     "prefer-stable": false,
