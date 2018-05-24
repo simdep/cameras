@@ -47,6 +47,8 @@ class CameraFixtures extends Fixture
         $camera->setName('A630 – PMV Mérignac – Sens Intérieur');
         $camera->setSerialNumber('');
         $camera->setType('reco');
+        $camera->setLatitude(44.8238056);
+        $camera->setLongitude(-0.67445);
         $manager->persist($camera);
 
         $camera = new Camera();
@@ -58,6 +60,8 @@ class CameraFixtures extends Fixture
         $camera->setName('A630 – PMV Mérignac – Sens Extérieur');
         $camera->setSerialNumber('');
         $camera->setType('reco');
+        $camera->setLatitude(44.8238056);
+        $camera->setLongitude(-0.6747);
         $manager->persist($camera);
 
         $camera = new Camera();
@@ -69,6 +73,8 @@ class CameraFixtures extends Fixture
         $camera->setName('RN230 – PMV Floirac – Sens Intérieur');
         $camera->setSerialNumber('');
         $camera->setType('reco');
+        $camera->setLatitude(44.8164444);
+        $camera->setLongitude(-0.52092);
         $manager->persist($camera);
 
         $camera = new Camera();
@@ -80,6 +86,8 @@ class CameraFixtures extends Fixture
         $camera->setName('RN230 – PMV Floirac – Sens Extérieur');
         $camera->setSerialNumber('');
         $camera->setType('reco');
+        $camera->setLatitude(44.8164444);
+        $camera->setLongitude(-0.52075);
         $manager->persist($camera);
 
         $camera = new Camera();
@@ -91,6 +99,8 @@ class CameraFixtures extends Fixture
         $camera->setName('RN10 - Ecotaxe Laruscade – Sens Bordeaux Paris');
         $camera->setSerialNumber('');
         $camera->setType('reco');
+        $camera->setLatitude(45.1578333);
+        $camera->setLongitude(-0.3515555555555555);
         $manager->persist($camera);
 
         $camera = new Camera();
@@ -102,6 +112,8 @@ class CameraFixtures extends Fixture
         $camera->setName('RN10 - Ecotaxe Laruscade – Sens Paris Bordeaux');
         $camera->setSerialNumber('');
         $camera->setType('reco');
+        $camera->setLatitude(45.15787);
+        $camera->setLongitude(-0.3517);
         $manager->persist($camera);
 
         $camera = new Camera();
@@ -113,6 +125,8 @@ class CameraFixtures extends Fixture
         $camera->setName('RN89 – Ecotaxe Vayres – Sens Bordeaux Lyon');
         $camera->setSerialNumber('');
         $camera->setType('reco');
+        $camera->setLatitude(44.8836389);
+        $camera->setLongitude(-0.33025);
         $manager->persist($camera);
 
         $camera = new Camera();
@@ -124,6 +138,8 @@ class CameraFixtures extends Fixture
         $camera->setName('RN89 – Ecotaxe Vayres – Sens Lyon Bordeaux');
         $camera->setSerialNumber('');
         $camera->setType('reco');
+        $camera->setLatitude(44.88375);
+        $camera->setLongitude(-0.33025);
         $manager->persist($camera);
 
         $camera = new Camera();
@@ -135,6 +151,8 @@ class CameraFixtures extends Fixture
         $camera->setName('A62 – Ecotaxe St Medard – Sens Bordeaux Toulouse');
         $camera->setSerialNumber('');
         $camera->setType('reco');
+        $camera->setLatitude(44.7053187468417);
+        $camera->setLongitude(-0.507841010252605);
         $manager->persist($camera);
 
         $camera = new Camera();
@@ -146,6 +164,8 @@ class CameraFixtures extends Fixture
         $camera->setName('A62 – Ecotaxe St Medard – Sens Toulouse Bordeaux');
         $camera->setSerialNumber('');
         $camera->setType('reco');
+        $camera->setLatitude(44.7053889);
+        $camera->setLongitude(-0.5076666666666667);
         $manager->persist($camera);
 
         $camera = new Camera();
@@ -157,6 +177,8 @@ class CameraFixtures extends Fixture
         $camera->setName('A10 – PMT Reignac – Sens Bordeaux Paris');
         $camera->setSerialNumber('');
         $camera->setType('reco');
+        $camera->setLatitude(45.2268889);
+        $camera->setLongitude(-0.5183055555555556);
         $manager->persist($camera);
 
         $camera = new Camera();
@@ -168,6 +190,8 @@ class CameraFixtures extends Fixture
         $camera->setName('A10 – PMT Reignac – Sens Paris Bordeaux');
         $camera->setSerialNumber('');
         $camera->setType('reco');
+        $camera->setLatitude(45.0958889);
+        $camera->setLongitude(-0.4753888888888889);
         $manager->persist($camera);
 
         $camera = new Camera();
@@ -179,6 +203,8 @@ class CameraFixtures extends Fixture
         $camera->setName('A63 – Péage Saugnacq – Sens Bordeaux Bayonne - 1');
         $camera->setSerialNumber('');
         $camera->setType('reco');
+        $camera->setLatitude(44.3476111);
+        $camera->setLongitude(-0.860111111111111);
         $manager->persist($camera);
 
         $camera = new Camera();
@@ -190,6 +216,8 @@ class CameraFixtures extends Fixture
         $camera->setName('A63 – Péage Saugnacq – Sens Bordeaux Bayonne - 2');
         $camera->setSerialNumber('');
         $camera->setType('reco');
+        $camera->setLatitude(44.3465556);
+        $camera->setLongitude(-0.8601666666666666);
         $manager->persist($camera);
 
         $camera = new Camera();
@@ -201,6 +229,8 @@ class CameraFixtures extends Fixture
         $camera->setName('A63 – Péage Saugnacq – Sens Bayonne Bordeaux - 1');
         $camera->setSerialNumber('');
         $camera->setType('reco');
+        $camera->setLatitude(44.34762);
+        $camera->setLongitude(-0.860111);
         $manager->persist($camera);
 
         $camera = new Camera();
@@ -212,6 +242,8 @@ class CameraFixtures extends Fixture
         $camera->setName('A63 – Péage Saugnacq – Sens Bayonne Bordeaux - 1');
         $camera->setSerialNumber('');
         $camera->setType('reco');
+        $camera->setLatitude(44.3465556);
+        $camera->setLongitude(-0.86017);
         $manager->persist($camera);
 
         $camera = new Camera();
@@ -223,6 +255,8 @@ class CameraFixtures extends Fixture
         $camera->setName('Parking CEREMA');
         $camera->setSerialNumber('');
         $camera->setType('reco');
+        $camera->setLatitude(44.884626);
+        $camera->setLongitude(-0.742790);
         $manager->persist($camera);
 
         $manager->flush();

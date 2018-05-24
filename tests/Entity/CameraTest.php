@@ -73,11 +73,14 @@ class CameraTest extends TestCase
         self::assertNull($this->camera->getIpCamera());
         self::assertNull($this->camera->getIpRouter());
         self::assertEquals(29, $this->camera->getMasque());
+        self::assertNull($this->camera->getLatitude());
+        self::assertNull($this->camera->getLongitude());
         self::assertNull($this->camera->getName());
         self::assertNull($this->camera->getSerialNumber());
         self::assertNull($this->camera->getType());
         self::assertNotNull($this->camera->getPassages());
         self::assertEmpty($this->camera->getPassages());
+        self::assertFalse($this->camera->hasCoordonnees());
         self::assertTrue($this->camera->isActive());
         self::assertFalse($this->camera->isTest());
     }
@@ -108,6 +111,41 @@ class CameraTest extends TestCase
 
         self::assertEquals($this->camera, $this->camera->setIpRouter($actual));
         self::assertEquals($expected, $this->camera->getIpRouter());
+    }
+
+    /**
+     * Test the latitude getter and setter.
+     */
+    public function testLatitude()
+    {
+        $expected = $actual = 44.233;
+
+        self::assertEquals($this->camera, $this->camera->setLatitude($actual));
+        self::assertEquals($expected, $this->camera->getLatitude());
+        self::assertFalse($this->camera->hasCoordonnees());
+
+        self::assertEquals($this->camera, $this->camera->setLatitude(null));
+        self::assertNull($this->camera->getLongitude());
+        self::assertFalse($this->camera->hasCoordonnees());
+    }
+
+    /**
+     * Test the longitude getter and setter.
+     */
+    public function testLongitude()
+    {
+        $expected = $actual = -0.5612;
+
+        self::assertEquals($this->camera, $this->camera->setLongitude($actual));
+        self::assertEquals($expected, $this->camera->getLongitude());
+        self::assertFalse($this->camera->hasCoordonnees());
+
+        self::assertEquals($this->camera, $this->camera->setLatitude($actual));
+        self::assertTrue($this->camera->hasCoordonnees());
+
+        self::assertEquals($this->camera, $this->camera->setLongitude(null));
+        self::assertNull($this->camera->getLongitude());
+        self::assertFalse($this->camera->hasCoordonnees());
     }
 
     /**

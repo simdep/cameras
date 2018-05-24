@@ -133,6 +133,24 @@ class Camera
     private $test = false;
 
     /**
+     * Latitude de la caméra.
+     *
+     * @var float
+     *
+     * @ORM\Column(type="float", nullable=true)
+     */
+    private $latitude;
+
+    /**
+     * Longitude de la caméra.
+     *
+     * @var float
+     *
+     * @ORM\Column(type="float", nullable=true)
+     */
+    private $longitude;
+
+    /**
      * Passages enregistrés par la caméra.
      *
      * @ORM\OneToMany(targetEntity="App\Entity\Passage", mappedBy="camera")
@@ -185,6 +203,26 @@ class Camera
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    /**
+     * Récupération de la latitude.
+     *
+     * @return float
+     */
+    public function getLatitude(): ?float
+    {
+        return $this->latitude;
+    }
+
+    /**
+     * Récupération de la longitude.
+     *
+     * @return float
+     */
+    public function getLongitude(): ?float
+    {
+        return $this->longitude;
     }
 
     /**
@@ -266,6 +304,16 @@ class Camera
     }
 
     /**
+     * Indique si on a les coordonnées des caméras ou non.
+     *
+     * @return bool
+     */
+    public function hasCoordonnees(): bool
+    {
+        return (null !== $this->latitude && null !== $this->longitude);
+    }
+
+    /**
      * Est-ce que la caméra est active ?
      *
      * Une caméra active est interrogée par l'importateur.
@@ -287,6 +335,32 @@ class Camera
     public function isTest(): bool
     {
         return $this->test;
+    }
+
+    /**
+     * Setter de la latitude.
+     *
+     * @param float $latitude
+     * @return Camera
+     */
+    public function setLatitude(?float $latitude): Camera
+    {
+        $this->latitude = $latitude;
+
+        return $this;
+    }
+
+    /**
+     * Setter de la longitude.
+     *
+     * @param float $longitude
+     * @return Camera
+     */
+    public function setLongitude(?float $longitude): Camera
+    {
+        $this->longitude = $longitude;
+
+        return $this;
     }
 
     /**
