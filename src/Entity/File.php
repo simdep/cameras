@@ -20,6 +20,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Annotation\ApiSubresource;
 
 /**
  * Fichier importé et anonymisé récupéré sur la caméra par l'importateur.
@@ -81,6 +82,8 @@ class File
      * Passages présents dans ce fichier.
      *
      * @ORM\OneToMany(targetEntity="App\Entity\Passage", mappedBy="file")
+     *
+     * @ApiSubresource
      *
      * @var Passage[]
      */

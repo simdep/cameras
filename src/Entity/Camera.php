@@ -20,6 +20,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Annotation\ApiSubresource;
 
 /**
  * Caméra.
@@ -135,6 +136,8 @@ class Camera
      * Passages enregistrés par la caméra.
      *
      * @ORM\OneToMany(targetEntity="App\Entity\Passage", mappedBy="camera")
+     *
+     * @ApiSubresource
      *
      * @var Passage[]
      */
