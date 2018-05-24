@@ -154,7 +154,7 @@ class LoadCommand extends Command
             ->addOption('overload', 'o', InputArgument::OPTIONAL, 'Répondre y si vous voulez recharger les fichiers déjà chargés (y/n)', 'n')
 
             //Add an option for reload file already loaded
-            ->addOption('transaction', 't', InputArgument::OPTIONAL, 'Valider la transaction après chaque fichier, à la fin du processus ? (f/p)', 'p')
+            ->addOption('transaction', 't', InputArgument::OPTIONAL, 'Valider la transaction après chaque fichier, à la fin du processus ? (f/p)', 'f')
 
             // the full command description shown when running the command with
             // the "--help" option
