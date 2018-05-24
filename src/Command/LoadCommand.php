@@ -37,6 +37,7 @@ class LoadCommand extends Command
      * Nombre de colonnes.
      */
     const COLUMN = 49;
+    const BATCH_SIZE = 2000;
 
     /**
      * Position des colonnes en commençant à zéro.
@@ -154,7 +155,10 @@ class LoadCommand extends Command
             ->addOption('overload', 'o', InputArgument::OPTIONAL, 'Répondre y si vous voulez recharger les fichiers déjà chargés (y/n)', 'n')
 
             //Add an option for reload file already loaded
-            ->addOption('transaction', 't', InputArgument::OPTIONAL, 'Valider la transaction après chaque fichier, à la fin du processus ? (f/p)', 'f')
+            ->addOption('transaction', 't', InputArgument::OPTIONAL, 'Valider la transaction après chaque fichier, à la fin du processus ou sans transaction ? (f/p/n)', 'f')
+
+            //Add an option for reload file already loaded
+            ->addOption('memory_limit', 'm', InputArgument::OPTIONAL, 'Laisser PHP utiliser la quantité de mémoire souhaitée ? (y/n)', 'y')
 
             // the full command description shown when running the command with
             // the "--help" option
@@ -202,10 +206,19 @@ class LoadCommand extends Command
             return;
         }
 
+        //Set memory limit.
+        if ('y' === $input->getOption('memory_limit')) {
+            @ini_set("memory_limit",-1);
+        }
+
         //On débute une transaction
-        if ('f' !== $input->getOption('transaction')) {
+        if ('f' !== $input->getOption('transaction') && 'n' !== $input->getOption('transaction')) {
             $this->entityManager->beginTransaction();
         }
+
+
+        //Optimisation : on désactive le log des requêtes
+        $this->entityManager->getConnection()->getConfiguration()->setSQLLogger(null);
 
         foreach ($cameras as $camera) {
             $output->writeln(sprintf('<comment>Parcours des fichiers la caméra « %s »</comment>', $camera->getName()));
@@ -277,14 +290,16 @@ class LoadCommand extends Command
                 $lignes = $this->loader->getLines($fileObject);
                 $output->write(sprintf('<comment>Fichier %s en cours de chargement (%d lignes).</comment> ', $fileInfo->getFilename(), $lignes));
 
-                //TODO Ajouter une progressbar
-                //https://symfony.com/doc/current/components/console/helpers/progressbar.html
                 // creates a new progress bar (50 units)
+                //https://symfony.com/doc/current/components/console/helpers/progressbar.html
                 $progressBar = new ProgressBar($output, $lignes);
                 // starts and displays the progress bar
                 $progressBar->start();
+                $progressBar->setFormat('debug');
 
+                $batchSize = 0;
                 while ($lignes > 0 && !$fileObject->eof()) {
+                    ++$batchSize;
                     $progressBar->advance();
                     $csv = $fileObject->fgetcsv("\t");
                     if (empty($csv) || 1 === count($csv)) {
@@ -317,12 +332,15 @@ class LoadCommand extends Command
                         ->setS((int) $csv[self::C_S])
                         ->setState($csv[self::C_PAYS]);
                     $this->entityManager->persist($passage);
-                    $this->entityManager->flush();
-                    $output->write('.');
-                    unset($passage,$csv);
+                    if (($batchSize % self::BATCH_SIZE) === 0) {
+                        $this->entityManager->flush();
+                        //$this->entityManager->clear();
+                    }
                 }
                 //Fermeture du fichier
-                unset($fileEntity, $fileObject, $empreinte, $lignes);
+                unset($fileObject, $empreinte, $lignes);
+                $this->entityManager->flush();
+                //$this->entityManager->clear();
                 $progressBar->finish();
                 $output->writeln("\n");
                 if ('f' === $input->getOption('transaction')) {
@@ -332,9 +350,10 @@ class LoadCommand extends Command
                 }
             }
             // Validation de l'ensemble du processus
-            if ('f' !== $input->getOption('transaction')) {
+            if ('f' !== $input->getOption('transaction') && 'n' === $input->getOption('transaction')) {
                 $output->writeln('<info>Validation de la transaction.</info>');
                 $this->entityManager->commit();
+                //$this->entityManager->clear();
             }
             $output->writeln(sprintf('<comment>Mémoire consommée : %s</comment>', memory_get_usage()));
 

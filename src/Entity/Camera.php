@@ -20,7 +20,6 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Core\Annotation\ApiResource;
-use ApiPlatform\Core\Annotation\ApiSubresource;
 
 /**
  * Caméra.
@@ -151,25 +150,6 @@ class Camera
     private $longitude;
 
     /**
-     * Passages enregistrés par la caméra.
-     *
-     * @ORM\OneToMany(targetEntity="App\Entity\Passage", mappedBy="camera")
-     *
-     * @ApiSubresource
-     *
-     * @var Passage[]
-     */
-    private $passages;
-
-    /**
-     * Camera constructor.
-     */
-    public function __construct()
-    {
-        $this->passages = new ArrayCollection();
-    }
-
-    /**
      * Retourne le répertoire où se trouvent les fichiers à télécharger.
      *
      * @return null|string
@@ -291,16 +271,6 @@ class Camera
     public function getMasque(): ?int
     {
         return $this->masque;
-    }
-
-    /**
-     * Retourne les passages enregistrés par cette caméra.
-     *
-     * @return Passage[]|Collection
-     */
-    public function getPassages(): Collection
-    {
-        return $this->passages;
     }
 
     /**

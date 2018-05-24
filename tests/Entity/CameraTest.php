@@ -78,8 +78,6 @@ class CameraTest extends TestCase
         self::assertNull($this->camera->getName());
         self::assertNull($this->camera->getSerialNumber());
         self::assertNull($this->camera->getType());
-        self::assertNotNull($this->camera->getPassages());
-        self::assertEmpty($this->camera->getPassages());
         self::assertFalse($this->camera->hasCoordonnees());
         self::assertTrue($this->camera->isActive());
         self::assertFalse($this->camera->isTest());

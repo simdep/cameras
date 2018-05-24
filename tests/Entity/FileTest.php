@@ -47,8 +47,6 @@ class FileTest extends TestCase
         self::assertNull($this->file->getDirectory());
         self::assertNull($this->file->getFilename());
         self::assertNull($this->file->getMd5sum());
-        self::assertNotNull($this->file->getPassages());
-        self::assertEmpty($this->file->getPassages());
     }
 
     /**

@@ -20,7 +20,6 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Core\Annotation\ApiResource;
-use ApiPlatform\Core\Annotation\ApiSubresource;
 
 /**
  * Fichier importé et anonymisé récupéré sur la caméra par l'importateur.
@@ -79,25 +78,6 @@ class File
     private $md5sum;
 
     /**
-     * Passages présents dans ce fichier.
-     *
-     * @ORM\OneToMany(targetEntity="App\Entity\Passage", mappedBy="file")
-     *
-     * @ApiSubresource
-     *
-     * @var Passage[]
-     */
-    private $passages;
-
-    /**
-     * File constructor.
-     */
-    public function __construct()
-    {
-        $this->passages = new ArrayCollection();
-    }
-
-    /**
      * Retourne l'identifiant primaire de ce fichier dans la base de données.
      *
      * @return int
@@ -135,16 +115,6 @@ class File
     public function getMd5sum(): ?string
     {
         return $this->md5sum;
-    }
-
-    /**
-     * Liste les passages associés à ce fichier.
-     *
-     * @return Passage[]|Collection
-     */
-    public function getPassages(): Collection
-    {
-        return $this->passages;
     }
 
     /**
