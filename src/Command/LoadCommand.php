@@ -67,7 +67,7 @@ class LoadCommand extends Command
     const C_O = 22; //o
     const C_O2 = 23; //O
     const C_G = 24; //g
-    const C_L = 25; //l
+    const C_NATURE_VEHICULE = 25; //l
     const C_H2 = 26; //h
     const C_I = 27; //i
     const C_T = 28; //t
@@ -328,6 +328,7 @@ class LoadCommand extends Command
                         ->setImmat($csv[self::C_PLAQUE_COURT])
                         ->setImmatriculation($csv[self::C_PLAQUE_LONG])
                         ->setIncrement($csv[self::C_INCREMENT])
+                        ->setL((int) $csv[self::C_NATURE_VEHICULE])
                         ->setR((int) $csv[self::C_R])
                         ->setS((int) $csv[self::C_S])
                         ->setState($csv[self::C_PAYS]);

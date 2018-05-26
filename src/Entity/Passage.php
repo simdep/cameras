@@ -44,6 +44,16 @@ use ApiPlatform\Core\Annotation\ApiResource;
 class Passage
 {
     /**
+     * Valeur pour un Camion.
+     */
+    const CAMION = 1;
+
+    /**
+     * Valeur pour un véhicule léger.
+     */
+    const LEGER = 0;
+
+    /**
      * Identifiant primaire du passage.
      *
      * @ORM\Id
@@ -142,6 +152,17 @@ class Passage
     private $h;
 
     /**
+     * Est-ce un camion ?
+     *
+     * 1 pour camion, 0 pour voiture, -1 pour plantage ?
+     *
+     * @ORM\Column(type="smallint", nullable=false)
+     *
+     * @var int
+     */
+    private $l;
+
+    /**
      * Pays visible sur la plaque d'immatriculation.
      *
      * La longueur est importante, car dans certains cas, la caméra remonte plein de valeurs possibles.
@@ -212,16 +233,6 @@ class Passage
     }
 
     /**
-     * Cette donnée est inconnue.
-     *
-     * @return int
-     */
-    public function getS(): ?int
-    {
-        return $this->s;
-    }
-
-    /**
      * Retourne la plaque d'immatriculation anonymisée.
      *
      * @return string
@@ -242,6 +253,16 @@ class Passage
     }
 
     /**
+     * Cette donnée indique s'il s'agit d'un camion ou non.
+     *
+     * @return int
+     */
+    public function getL(): ?int
+    {
+        return $this->l;
+    }
+
+    /**
      * Cette donnée est inconnue.
      *
      * @return int
@@ -249,6 +270,16 @@ class Passage
     public function getR(): ?int
     {
         return $this->r;
+    }
+
+    /**
+     * Cette donnée est inconnue.
+     *
+     * @return int
+     */
+    public function getS(): ?int
+    {
+        return $this->s;
     }
 
     /**
@@ -311,6 +342,15 @@ class Passage
         return $this->file;
     }
 
+    /**
+     * Retourne vrai s'il s'agit d'un camion.
+     *
+     * @return bool
+     */
+    public function isCamion(): bool
+    {
+        return self::CAMION === $this->l;
+    }
     /**
      * Indique s'il s'agit d'une donnée fictive ou non.
      *
@@ -393,6 +433,20 @@ class Passage
     public function setImmat(string $immat): Passage
     {
         $this->immat = $immat;
+
+        return $this;
+    }
+
+    /**
+     * Définit le type de véhicule.
+     *
+     * @param int $r
+     *
+     * @return Passage
+     */
+    public function setL(int $l): Passage
+    {
+        $this->l = $l;
 
         return $this;
     }
