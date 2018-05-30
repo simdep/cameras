@@ -29,7 +29,8 @@ use ApiPlatform\Core\Annotation\ApiResource;
  * )
  *
  * @ApiResource(
- *     collectionOperations={"get"}
+ *     collectionOperations={"get"},
+ *     attributes={"order"={"passage":"DESC"}}
  * )
  */
 class CamionFiable
