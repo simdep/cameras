@@ -30,6 +30,7 @@ use ApiPlatform\Core\Annotation\ApiResource;
  *
  * @ApiResource(
  *     collectionOperations={"get"},
+ *     itemOperations={"get"},
  *     attributes={"order"={"passage":"DESC"}}
  * )
  */

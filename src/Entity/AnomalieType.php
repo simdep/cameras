@@ -22,7 +22,7 @@ use ApiPlatform\Core\Annotation\ApiResource;
 /**
  * Plaques et statistiques qui rencontrent des problèmes sur le type de véhicule identifié.
  *
- * @ORM\Entity(repositoryClass="App\Repository\PassageRepository")
+ * @ORM\Entity
  * @ORM\Table(
  *     name="ve_anomalie_type",
  *     schema="data",
@@ -30,7 +30,7 @@ use ApiPlatform\Core\Annotation\ApiResource;
  *
  * @ApiResource(
  *     collectionOperations={"get"},
- *     itemOperations={},
+ *     itemOperations={"get"},
  *     attributes={"order"={"identification":"DESC","ecart":"DESC","passage":"DESC"}}
  * )
  */
