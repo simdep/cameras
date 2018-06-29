@@ -8,5 +8,10 @@ api_platform:
     # The version of the API.
     version: '0.0.1'
 
+    #Necessary to activate client config
+    collection:
+        pagination:
+            client_items_per_page: true # Disabled by default
+            items_per_page_parameter_name: itemsPerPage # Default value
     mapping:
         paths: ['%kernel.project_dir%/src/Entity']
