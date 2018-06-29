@@ -22,9 +22,40 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class StatisticController
 {
+    /**
+     * "All statistics" Controller.
+     *
+     * @Route("/api/statistics", name="statistic")
+     *
+     * @param EntityManagerInterface $em
+     * @return JsonResponse
+     */
+    public function allStatistics(EntityManagerInterface $em): JsonResponse
+    {
+        /** @var PassageRepository $passageRepository */
+        $passageRepository = $em->getRepository('App:Passage');
+        /** @var CameraRepository $cameraRepository */
+        $cameraRepository = $em->getRepository('App:Camera');
+
+        $totalPassage = $passageRepository->countAll();
+        $totalCamion = $passageRepository->countCamionFiable();
+        $totalCamera = $cameraRepository->countAll();
+        $activeCamera = $cameraRepository->countActive();
+
+        $response = new JsonResponse();
+        $response->setData([
+            'activeCameras' => $activeCamera,
+            'passages' => $totalPassage,
+            'camions' => $totalCamion,
+            'cameras' => $totalCamera
+        ]);
+
+        return $response;
+    }
 
     /**
      * @Route("/api/cameras/count", name="statistic_camera")
+     * @Route("/api/statistics/camera", name="statistic_camera")
      *
      * @param EntityManagerInterface $em
      * @return JsonResponse
