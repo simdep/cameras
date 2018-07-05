@@ -1,9 +1,17 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: alexandre.tranchant
- * Date: 25/05/2018
- * Time: 18:23
+ * This file is part of the LAPI application.
+ *
+ * PHP version 7.2
+ *
+ * (c) Alexandre Tranchant <alexandre.tranchant@gmail.com>
+ *
+ * @category Entity
+ *
+ * @author    Alexandre Tranchant <alexandre.tranchant@gmail.com>
+ * @license   CECIL-B
+ *
+ * @see https://github.com/Alexandre-T/casguard/blob/master/LICENSE
  */
 
 namespace App\Controller;

@@ -237,6 +237,7 @@ class LoadCommand extends Command
             //Parcours du répertoire
             foreach (scandir($directoryname) as $filename) {
                 $fileInfo = new \SplFileInfo($directoryname.'/'.$filename);
+
                 //on élimine silencieusement les répertoires
                 if ($fileInfo->isDir()) {
                     $output->writeln(sprintf('<comment>Répertoire %s ignoré</comment>', $fileInfo->getFilename()));
@@ -325,6 +326,7 @@ class LoadCommand extends Command
                         ->setFiability($csv[self::C_FIABILITE])
                         ->setFile($fileEntity)
                         ->setH($csv[self::C_H])
+                        ->setImage($csv[self::C_IMAGE])
                         ->setImmat($csv[self::C_PLAQUE_COURT])
                         ->setImmatriculation($csv[self::C_PLAQUE_LONG])
                         ->setIncrement($csv[self::C_INCREMENT])

@@ -183,6 +183,15 @@ class Passage
     private $dataFictive;
 
     /**
+     * Nom du fichier image en noir et blanc.
+     *
+     * @ORM\Column(type="string", length=32, nullable=true)
+     *
+     * @var string
+     */
+    private $image;
+
+    /**
      * Caméra ayant enregistré ce passage.
      *
      * @ORM\ManyToOne(targetEntity="App\Entity\Camera", inversedBy="passages")
@@ -220,6 +229,16 @@ class Passage
     public function getCreated(): ?\DateTime
     {
         return $this->created;
+    }
+
+    /**
+     * Récupère le nom du fichier image.
+     *
+     * @return string
+     */
+    public function getImage(): ?string
+    {
+        return $this->image;
     }
 
     /**
@@ -373,6 +392,20 @@ class Passage
     public function setCreated(\DateTime $created): Passage
     {
         $this->created = $created;
+
+        return $this;
+    }
+
+    /**
+     * Retourne le nom du fichier image.
+     *
+     * @param string $image
+     *
+     * @return Passage
+     */
+    public function setImage(string $image): Passage
+    {
+        $this->image = $image;
 
         return $this;
     }

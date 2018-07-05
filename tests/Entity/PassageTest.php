@@ -51,6 +51,7 @@ class PassageTest extends TestCase
         self::assertNull($this->passage->getCreated());
         self::assertNull($this->passage->getFiability());
         self::assertNull($this->passage->getFile());
+        self::assertNull($this->passage->getImage());
         self::assertNull($this->passage->getImmat());
         self::assertNull($this->passage->getImmatriculation());
         self::assertNull($this->passage->getIncrement());
@@ -115,6 +116,17 @@ class PassageTest extends TestCase
         self::assertEquals($expected, $this->passage->getFile());
     }
 
+    /**
+     * Test image getter and setter.
+     */
+    public function testImage()
+    {
+        $expected = $actual = 'toto';
+
+        self::assertEquals($this->passage, $this->passage->setImage($actual));
+        self::assertEquals($expected, $this->passage->getImage());
+    }
+    
     /**
      * Test immat getter and setter.
      */
