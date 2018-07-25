@@ -31,7 +31,7 @@ use ApiPlatform\Core\Annotation\ApiResource;
  * @ApiResource(
  *     collectionOperations={"get"},
  *     itemOperations={"get"},
- *     attributes={"order"={"identification":"DESC","ecart":"DESC","passage":"DESC"}}
+ *     attributes={"order"={"nbCamion":"ASC","identification":"DESC","ecart":"DESC","passage":"DESC"}}
  * )
  */
 class AnomalieType
