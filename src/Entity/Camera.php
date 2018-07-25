@@ -16,10 +16,11 @@
 
 namespace App\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\BooleanFilter;
+
 
 /**
  * Caméra.
@@ -27,7 +28,8 @@ use ApiPlatform\Core\Annotation\ApiResource;
  * @ORM\Entity(repositoryClass="App\Repository\CameraRepository")
  * @ORM\Table(name="te_camera", schema="data", indexes={@ORM\Index(name="ndx_camera_active", columns={"active"})})
  *
- * @ApiResource
+ * @ApiResource()
+ * @ApiFilter(BooleanFilter::class, properties={"isActive"})
  */
 class Camera
 {
