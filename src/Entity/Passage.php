@@ -39,7 +39,10 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
  * )
  *
  * @ApiResource(
- *     collectionOperations={"get"},
+ *     collectionOperations={
+ *         "get",
+ *         "get_unique_cars"={"method"="GET", "path"="/passages/get_unique_cars"}
+ *     },
  *     itemOperations={"get"}
  * )
  *

@@ -71,6 +71,8 @@ class PassageRepository extends EntityRepository
      * @return string
      *
      * @throws PassageRepositoryException
+     *
+     * @throws \Doctrine\ORM\ORMException
      */
     public function getImage(string $immatriculation): string
     {
@@ -97,5 +99,39 @@ class PassageRepository extends EntityRepository
         }
 
         throw new PassageRepositoryException('Aucune image n’existe pour l’immatriculation fournie');
+    }
+
+    /**
+     * Liste les passages de véhicules détectés comme voiture.
+     *
+     * @return Passage[]
+     *
+     * @throws \Doctrine\ORM\ORMException
+     */
+    public function uniqueCars()
+    {
+        $passagesImmatriculation = array_map('array_pop', $this->searchUniqueCars());
+
+        return $this->findByImmatriculation($passagesImmatriculation);
+    }
+
+    /**
+     * Retourne le nombre de passages.
+     *
+     * @param int $limit
+     *
+     * @return array
+     */
+    protected function searchUniqueCars(int $limit = 30): array
+    {
+        $qb = $this->createQueryBuilder('p')
+            ->select('p.immatriculation')
+            ->where('p.l = -1')
+            ->groupBy('p.immatriculation')
+            ->having('count(p.id) = 1')
+            ->andHaving('count(p.l) = 1')
+            ->setMaxResults($limit);
+
+        return $qb->getQuery()->getArrayResult();
     }
 }

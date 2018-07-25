@@ -123,5 +123,4 @@ class StatisticController
 
        return $response;
     }
-
 }
