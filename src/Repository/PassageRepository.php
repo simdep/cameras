@@ -105,32 +105,44 @@ class PassageRepository extends EntityRepository
      * Liste les passages de véhicules détectés comme voiture.
      *
      * @return Passage[]
-     *
-     * @throws \Doctrine\ORM\ORMException
      */
     public function uniqueCars()
     {
-        $passagesImmatriculation = array_map('array_pop', $this->searchUniqueCars());
+        $passagesId = array_map('array_pop', $this->searchUniqueCars());
 
-        return $this->findByImmatriculation($passagesImmatriculation);
+        return $this->findBy(['id' => $passagesId]);
     }
 
     /**
      * Retourne le nombre de passages.
      *
-     * @param int $limit
+     * @param int $start start hour
+     * @param int $end   end hour
+     * @param int $limit nb of element retrieved
      *
      * @return array
      */
-    protected function searchUniqueCars(int $limit = 30): array
+    protected function searchUniqueCars(int $start = 9, int $end = 15, int $limit = 30): array
     {
+        $start = sprintf('%02d', max(0,min(24, $start)));
+        $end = sprintf('%02d', max(0,min(24, $end)));
+
+        $subquery = $this->createQueryBuilder('c')
+            ->select('1')
+            ->where('c.immatriculation = p.immatriculation')
+            ->groupBy('c.immatriculation')
+            ->having('count(c.id) = 1');
+
         $qb = $this->createQueryBuilder('p')
-            ->select('p.immatriculation')
+            ->select('p.id')
             ->where('p.l = -1')
-            ->groupBy('p.immatriculation')
-            ->having('count(p.id) = 1')
-            ->andHaving('count(p.l) = 1')
+            ->andWhere("date_format(p.created, 'HH24') >= :start")
+            ->andWhere("date_format(p.created, 'HH24') <= :end")
+            ->setParameter('start', $start)
+            ->setParameter('end', $end)
             ->setMaxResults($limit);
+
+        $qb->andWhere($qb->expr()->exists($subquery->getDQL()));
 
         return $qb->getQuery()->getArrayResult();
     }
