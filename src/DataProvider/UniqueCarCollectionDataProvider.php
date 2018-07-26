@@ -24,6 +24,8 @@ class UniqueCarCollectionDataProvider implements CollectionDataProviderInterface
      */
     private $repository;
 
+    private $filters = [];
+
     /**
      * UniqueCarCollectionDataProvider constructor.
      *
@@ -36,11 +38,28 @@ class UniqueCarCollectionDataProvider implements CollectionDataProviderInterface
 
     public function getCollection(string $resourceClass, string $operationName = null)
     {
-        return $this->repository->uniqueCars();
+        //FIXME initialization can't be here
+        $start = 9;
+        $end = 16;
+        $offset = 0;
+        $limit = 32;
+
+        //FIXME Transform this manual filters into a dynamic time filters (by creating my own startEndFilter?)
+        if (key_exists('time', $this->filters)) {
+            list($start, $end) = explode("..", $this->filters['time']);
+            $start = min(24,max(0,(int)$start));
+            $end = min(24,max(0,(int)$end));
+        }
+
+        return $this->repository->uniqueCars($start, $end, $offset, $limit);
     }
 
     public function supports(string $resourceClass, string $operationName = null, array $context = []): bool
     {
+        if (key_exists('filters', $context)) {
+            $this->filters = $context['filters'];
+        }
+
         return 'get_unique_cars' === $operationName && Passage::class === $resourceClass;
     }
 }

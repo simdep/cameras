@@ -47,6 +47,7 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
  * )
  *
  * @ApiFilter(SearchFilter::class, properties={"immatriculation": "exact"})
+ * @ApiFilter(SearchFilter::class, properties={"immatriculation": "exact"})
  */
 class Passage
 {

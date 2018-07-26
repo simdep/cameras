@@ -104,11 +104,16 @@ class PassageRepository extends EntityRepository
     /**
      * Liste les passages de véhicules détectés comme voiture.
      *
+     * @param int $start start hour
+     * @param int $end end hour
+     * @param int $offset
+     * @param int $limit nb of element retrieved
+     *
      * @return Passage[]
      */
-    public function uniqueCars()
+    public function uniqueCars(int $start = 9, int $end = 15, int $offset = 0, int $limit = 32)
     {
-        $passagesId = array_map('array_pop', $this->searchUniqueCars());
+        $passagesId = array_map('array_pop', $this->searchUniqueCars($start, $end, $offset, $limit));
 
         return $this->findBy(['id' => $passagesId]);
     }
@@ -117,12 +122,13 @@ class PassageRepository extends EntityRepository
      * Retourne le nombre de passages.
      *
      * @param int $start start hour
-     * @param int $end   end hour
+     * @param int $end end hour
+     * @param int $offset
      * @param int $limit nb of element retrieved
      *
      * @return array
      */
-    protected function searchUniqueCars(int $start = 9, int $end = 15, int $limit = 30): array
+    protected function searchUniqueCars(int $start = 9, int $end = 15, int $offset = 0, int $limit = 32): array
     {
         $start = sprintf('%02d', max(0,min(24, $start)));
         $end = sprintf('%02d', max(0,min(24, $end)));
@@ -140,6 +146,7 @@ class PassageRepository extends EntityRepository
             ->andWhere("date_format(p.created, 'HH24') <= :end")
             ->setParameter('start', $start)
             ->setParameter('end', $end)
+            ->setFirstResult($offset)
             ->setMaxResults($limit);
 
         $qb->andWhere($qb->expr()->exists($subquery->getDQL()));
