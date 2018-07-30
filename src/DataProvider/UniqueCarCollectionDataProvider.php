@@ -51,6 +51,14 @@ class UniqueCarCollectionDataProvider implements CollectionDataProviderInterface
             $end = min(24,max(0,(int)$end));
         }
 
+        //FIXME Transform this manual filters into a dynamic integer filters
+        if (key_exists('limit', $this->filters)) {
+            //integer
+            $limit = (int)($this->filters['limit']);
+            //multiple of 4
+            $limit = 4 * min(1,max(128, (int)($limit / 4)));
+        }
+
         return $this->repository->uniqueCars($start, $end, $offset, $limit);
     }
 
