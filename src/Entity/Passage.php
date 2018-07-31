@@ -54,12 +54,12 @@ class Passage
     /**
      * Valeur pour un Camion.
      */
-    const CAMION = 1;
+    const TRUCK = 1;
 
     /**
      * Valeur pour un véhicule léger.
      */
-    const LEGER = 0;
+    const CAR = 0;
 
     /**
      * Identifiant primaire du passage.
@@ -376,7 +376,7 @@ class Passage
      */
     public function isCamion(): bool
     {
-        return self::CAMION === $this->l;
+        return self::TRUCK === $this->l;
     }
     /**
      * Indique s'il s'agit d'une donnée fictive ou non.
