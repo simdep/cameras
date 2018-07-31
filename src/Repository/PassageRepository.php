@@ -16,6 +16,7 @@
 
 namespace App\Repository;
 
+use \DateTime;
 use App\Entity\Passage;
 use App\Exception\PassageRepositoryException;
 use Doctrine\ORM\EntityRepository;
@@ -104,6 +105,8 @@ class PassageRepository extends EntityRepository
     /**
      * Liste les passages de véhicules détectés comme voiture.
      *
+     * @param DateTime|null $startDate
+     * @param DateTime|null $endDate
      * @param int $start start hour
      * @param int $end end hour
      * @param int $offset
@@ -111,9 +114,9 @@ class PassageRepository extends EntityRepository
      *
      * @return Passage[]
      */
-    public function uniqueCars(int $start = 9, int $end = 15, int $offset = 0, int $limit = 32)
+    public function uniqueCars(DateTime $startDate = null, DateTime $endDate = null, int $start = 9, int $end = 15, int $offset = 0, int $limit = 32)
     {
-        $passagesId = array_map('array_pop', $this->searchUniqueCars($start, $end, $offset, $limit));
+        $passagesId = array_map('array_pop', $this->searchUniqueCars($startDate, $endDate, $start, $end, $offset, $limit));
 
         return $this->findBy(['id' => $passagesId]);
     }
@@ -121,6 +124,8 @@ class PassageRepository extends EntityRepository
     /**
      * Retourne le nombre de passages.
      *
+     * @param DateTime|null $startDate
+     * @param DateTime|null $endDate
      * @param int $start start hour
      * @param int $end end hour
      * @param int $offset
@@ -128,7 +133,7 @@ class PassageRepository extends EntityRepository
      *
      * @return array
      */
-    protected function searchUniqueCars(int $start = 9, int $end = 15, int $offset = 0, int $limit = 32): array
+    protected function searchUniqueCars(DateTime $startDate = null, DateTime $endDate = null, int $start = 9, int $end = 15, int $offset = 0, int $limit = 32): array
     {
         $start = sprintf('%02d', max(0,min(24, $start)));
         $end = sprintf('%02d', max(0,min(24, $end)));
@@ -145,9 +150,20 @@ class PassageRepository extends EntityRepository
             ->andWhere("date_format(p.created, 'HH24') >= :start")
             ->andWhere("date_format(p.created, 'HH24') <= :end")
             ->setParameter('start', $start)
-            ->setParameter('end', $end)
-            ->setFirstResult($offset)
-            ->setMaxResults($limit);
+            ->setParameter('end', $end);
+
+        if (null !== $startDate && null !== $endDate) {
+           $qb
+               ->andWhere("p.created >= :startDate")
+               ->andWhere("p.created <= :endDate")
+               ->setParameter('startDate', $startDate)
+               ->setParameter('endDate', $endDate);
+        }
+
+        $qb->setFirstResult($offset)
+           ->setMaxResults($limit)
+            ->orderBy('p.created','ASC');
+
 
         $qb->andWhere($qb->expr()->exists($subquery->getDQL()));
 

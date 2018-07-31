@@ -43,23 +43,39 @@ class UniqueCarCollectionDataProvider implements CollectionDataProviderInterface
         $end = 16;
         $offset = 0;
         $limit = 32;
+        $startDate = null;
+        $endDate = null;
 
-        //FIXME Transform this manual filters into a dynamic time filters (by creating my own startEndFilter?)
+        //FIXME Transform this manual filters into a dynamic time filters
         if (key_exists('time', $this->filters)) {
             list($start, $end) = explode("..", $this->filters['time']);
             $start = min(24,max(0,(int)$start));
             $end = min(24,max(0,(int)$end));
         }
 
-        //FIXME Transform this manual filters into a dynamic integer filters
-        if (key_exists('limit', $this->filters)) {
-            //integer
-            $limit = (int)($this->filters['limit']);
-            //multiple of 4
-            $limit = 4 * min(1,max(128, (int)($limit / 4)));
+        //FIXME Transform this manual filters into a dynamic time filters
+        if (key_exists('dates', $this->filters)) {
+            list($startDateString, $endDateString) = explode("..", $this->filters['dates']);
+            $startDate = new \DateTime();
+            $endDate = new \DateTime();
+            $startDate->setDate(
+                substr($startDateString,0,4),
+                substr($startDateString,4,2),
+                substr($startDateString,6,2)
+                );
+            $endDate->setDate(
+                substr($endDateString,0,4),
+                substr($endDateString,4,2),
+                substr($endDateString,6,2)
+                );
         }
 
-        return $this->repository->uniqueCars($start, $end, $offset, $limit);
+        //FIXME Transform this manual filters into a dynamic integer filters
+        if (key_exists('limit', $this->filters)) {
+            $limit = max(1,min(128, (int)($this->filters['limit'])));
+        }
+
+        return $this->repository->uniqueCars($startDate, $endDate, $start, $end, $offset, $limit);
     }
 
     public function supports(string $resourceClass, string $operationName = null, array $context = []): bool
