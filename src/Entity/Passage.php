@@ -41,7 +41,8 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
  * @ApiResource(
  *     collectionOperations={
  *         "get",
- *         "get_unique_cars"={"method"="GET", "path"="/passages/get_unique_cars"}
+ *         "get_unique_cars"={"method"="GET", "path"="/passages/get_unique_cars"},
+ *         "get_unique_trucks"={"method"="GET", "path"="/passages/get_unique_trucks"}
  *     },
  *     itemOperations={"get"}
  * )
@@ -57,9 +58,14 @@ class Passage
     const TRUCK = 1;
 
     /**
+     * Valeur pour un inconnu.
+     */
+    const UNKNOWN = 0;
+
+    /**
      * Valeur pour un véhicule léger.
      */
-    const CAR = 0;
+    const CAR = -1;
 
     /**
      * Identifiant primaire du passage.

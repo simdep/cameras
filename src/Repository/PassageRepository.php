@@ -103,7 +103,7 @@ class PassageRepository extends EntityRepository
     }
 
     /**
-     * Liste les passages de véhicules détectés comme voiture.
+     * Liste les passages uniques de véhicules détectés comme voiture.
      *
      * @param DateTime|null $startDate
      * @param DateTime|null $endDate
@@ -116,7 +116,45 @@ class PassageRepository extends EntityRepository
      */
     public function uniqueCars(DateTime $startDate = null, DateTime $endDate = null, int $start = 9, int $end = 15, int $offset = 0, int $limit = 32)
     {
-        $passagesId = array_map('array_pop', $this->searchUniqueCars($startDate, $endDate, $start, $end, $offset, $limit));
+        $passagesId = array_map('array_pop', $this->searchUniquePassages(Passage::CAR, $startDate, $endDate, $start, $end, $offset, $limit));
+
+        return $this->findBy(['id' => $passagesId]);
+    }
+
+    /**
+     * Liste les passages uniques de véhicules détectés comme camions.
+     *
+     * @param DateTime|null $startDate
+     * @param DateTime|null $endDate
+     * @param int $start start hour
+     * @param int $end end hour
+     * @param int $offset
+     * @param int $limit nb of element retrieved
+     *
+     * @return Passage[]
+     */
+    public function uniqueTrucks(DateTime $startDate = null, DateTime $endDate = null, int $start = 9, int $end = 15, int $offset = 0, int $limit = 32)
+    {
+        $passagesId = array_map('array_pop', $this->searchUniquePassages(Passage::TRUCK, $startDate, $endDate, $start, $end, $offset, $limit));
+
+        return $this->findBy(['id' => $passagesId]);
+    }
+
+    /**
+     * Liste les passages uniques de véhicules détectés comme inconnus.
+     *
+     * @param DateTime|null $startDate
+     * @param DateTime|null $endDate
+     * @param int $start start hour
+     * @param int $end end hour
+     * @param int $offset
+     * @param int $limit nb of element retrieved
+     *
+     * @return Passage[]
+     */
+    public function uniqueUnknown(DateTime $startDate = null, DateTime $endDate = null, int $start = 9, int $end = 15, int $offset = 0, int $limit = 32)
+    {
+        $passagesId = array_map('array_pop', $this->searchUniquePassages(Passage::UNKNOWN, $startDate, $endDate, $start, $end, $offset, $limit));
 
         return $this->findBy(['id' => $passagesId]);
     }
@@ -133,7 +171,7 @@ class PassageRepository extends EntityRepository
      *
      * @return array
      */
-    protected function searchUniqueCars(DateTime $startDate = null, DateTime $endDate = null, int $start = 9, int $end = 15, int $offset = 0, int $limit = 32): array
+    protected function searchUniquePassages(int $kind, DateTime $startDate = null, DateTime $endDate = null, int $start = 9, int $end = 15, int $offset = 0, int $limit = 32): array
     {
         $start = sprintf('%02d', max(0,min(24, $start)));
         $end = sprintf('%02d', max(0,min(24, $end)));
@@ -146,11 +184,13 @@ class PassageRepository extends EntityRepository
 
         $qb = $this->createQueryBuilder('p')
             ->select('p.id')
-            ->where('p.l = -1')
+            ->where('p.l = :kind')
             ->andWhere("date_format(p.created, 'HH24') >= :start")
             ->andWhere("date_format(p.created, 'HH24') <= :end")
+            ->setParameter('kind', $kind)
             ->setParameter('start', $start)
             ->setParameter('end', $end);
+
 
         if (null !== $startDate && null !== $endDate) {
            $qb
