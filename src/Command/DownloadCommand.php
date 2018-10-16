@@ -146,12 +146,12 @@ class DownloadCommand extends Command
                 }
             } elseif ('today' == $input->getOption('day')) {
                 $today = new \DateTime();
-                $cle = 'ucL'.$today->format('Y_m_d');
+                $cle = 'ucL1'.$today->format('Y_m_d');
                 $files[$cle] = $camera->getDirectory().$cle;
             } else {
                 $yesterday = new \DateTime();
                 $yesterday->sub(new \DateInterval('P1D'));
-                $cle = 'ucL'.$yesterday->format('Y_m_d');
+                $cle = 'ucL1'.$yesterday->format('Y_m_d');
                 $files[$cle] = $camera->getDirectory().$cle;
             }
 
