@@ -17,12 +17,14 @@ use App\Entity\Passage;
 use App\Repository\PassageRepository;
 use Doctrine\ORM\EntityManagerInterface;
 
-class UniqueTruckCollectionDataProvider implements CollectionDataProviderInterface, RestrictedDataProviderInterface
+class UniqueCollectionDataProvider implements CollectionDataProviderInterface, RestrictedDataProviderInterface
 {
     /**
      * @var PassageRepository
      */
     private $repository;
+
+    private $method;
 
     private $filters = [];
 
@@ -71,11 +73,11 @@ class UniqueTruckCollectionDataProvider implements CollectionDataProviderInterfa
         }
 
         //FIXME Transform this manual filters into a dynamic integer filters
-        if (key_exists('limit', $this->filters)) {
-            $limit = max(1,min(128, (int)($this->filters['limit'])));
+        if (key_exists('itemsPerPage', $this->filters)) {
+            $limit = max(1,min(128, (int)($this->filters['itemsPerPage'])));
         }
 
-        return $this->repository->uniqueTrucks($startDate, $endDate, $start, $end, $offset, $limit);
+        return $this->repository->{$this->method}($startDate, $endDate, $start, $end, $offset, $limit);
     }
 
     public function supports(string $resourceClass, string $operationName = null, array $context = []): bool
@@ -84,6 +86,23 @@ class UniqueTruckCollectionDataProvider implements CollectionDataProviderInterfa
             $this->filters = $context['filters'];
         }
 
-        return 'get_unique_trucks' === $operationName && Passage::class === $resourceClass;
+        if (Passage::class !== $resourceClass) {
+            return false;
+        }
+
+        $this->operationName = $operationName;
+        switch ($operationName) {
+            case 'get_unique_trucks':
+                $this->method = 'uniqueTrucks';
+                return true;
+            case 'get_unique_cars':
+                $this->method = 'uniqueCars';
+                return true;
+            case 'get_unique_unknown':
+                $this->method = 'uniqueUnknown';
+                return true;
+        }
+
+        return false;
     }
 }

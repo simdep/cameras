@@ -82,7 +82,7 @@ class DownloadCommand extends Command
             ->addOption('day', 'd', InputArgument::OPTIONAL, 'day you want to retrieve (all, today, yesterday)', 'yesterday')
 
             //Add an option for image to download
-            ->addOption('image', 'i', InputArgument::OPTIONAL, 'set to true if you want to download images', true)
+            ->addOption('image', 'i', InputArgument::OPTIONAL, 'set to true if you want to download images', false)
 
             // the full command description shown when running the command with
             // the "--help" option

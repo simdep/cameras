@@ -42,12 +42,12 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
  *     collectionOperations={
  *         "get",
  *         "get_unique_cars"={"method"="GET", "path"="/passages/get_unique_cars"},
- *         "get_unique_trucks"={"method"="GET", "path"="/passages/get_unique_trucks"}
+ *         "get_unique_trucks"={"method"="GET", "path"="/passages/get_unique_trucks"},
+ *         "get_unique_unknown"={"method"="GET", "path"="/passages/get_unique_unknown"}
  *     },
  *     itemOperations={"get"}
  * )
  *
- * @ApiFilter(SearchFilter::class, properties={"immatriculation": "exact"})
  * @ApiFilter(SearchFilter::class, properties={"immatriculation": "exact"})
  */
 class Passage
@@ -60,12 +60,12 @@ class Passage
     /**
      * Valeur pour un inconnu.
      */
-    const UNKNOWN = 0;
+    const UNKNOWN = -1;
 
     /**
      * Valeur pour un véhicule léger.
      */
-    const CAR = -1;
+    const CAR = 0;
 
     /**
      * Identifiant primaire du passage.
