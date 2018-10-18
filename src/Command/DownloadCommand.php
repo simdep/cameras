@@ -76,17 +76,20 @@ class DownloadCommand extends Command
             ->setName('app:download')
 
             // the short description shown while running "php bin/console list"
-            ->setDescription('Download and hash available files from active cameras.')
+            ->setDescription('Télécharge et crypte les fichiers d’immatriculations pour les caméras actives.')
 
             //configure option for day to download
-            ->addOption('day', 'd', InputArgument::OPTIONAL, 'day you want to retrieve (all, today, yesterday)', 'yesterday')
+            ->addOption('day', 'd', InputArgument::OPTIONAL, 'Journée à récupérer (all, today, yesterday)', 'yesterday')
 
             //Add an option for image to download
-            ->addOption('image', 'i', InputArgument::OPTIONAL, 'set to true if you want to download images', false)
+            ->addOption('image', 'i', InputArgument::OPTIONAL, 'Mettre à true si vous voulez forcer le téléchargement des images. ATTENTION à la bande passante', false)
+
+            //Add an option to override files
+            ->addOption('override', 'o', InputArgument::OPTIONAL, 'Mettre à true si vous voulez écraser les fichiers déjà existants', false)
 
             // the full command description shown when running the command with
             // the "--help" option
-            ->setHelp('This command downloads all available files from active cameras. Immatriculation are immediately hashed.')
+            ->setHelp('Cette commande télécharge, par défaut, tous les fichiers de la veille des caméras déclarées actives dans la base de données. Les immatriculations sont aussitôt cryptées. Les fichiers déjà téléchargés ne sont pas retéléchargés par défaut. Les options permettent de personnaliser les téléchargements.')
         ;
     }
 
@@ -103,13 +106,14 @@ class DownloadCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         if (!$this->lock()) {
-            $output->writeln('<error>The command is already running in another process.</error>');
+            $output->writeln('<error>La commande tourne déjà dans un autre processus.</error>');
 
             return;
         }
 
         // outputs multiple lines to the console (adding "\n" at the end of each line)
         $output->writeln([
+            //TODO Ajouter l'horodatage
             'Downloader lancé',
             '================',
             'Étape 1 : interrogation de la base de données pour déterminer le nombre de caméras ...',
@@ -159,7 +163,7 @@ class DownloadCommand extends Command
             foreach ($files as $key => $file) {
                 $output->writeln(sprintf('        Lecture du fichier « %s » de la caméra « %s »', $key, $camera->getName()));
                 try {
-                    $lines = $this->downloader->downloadFile($file, $camera->getCode());
+                    $lines = $this->downloader->downloadFile($file, $camera->getCode(), $input->getOption('override'));
                     $output->writeln(sprintf('           %s passages anonymisés et récupérées', count($lines)));
                 } catch (DownloadException $e) {
                     $output->writeln('Erreur : '.$e->getMessage());

@@ -62,16 +62,21 @@ class DownloadUtils
      *
      * @param string $file Fichier à télécharger
      * @param string $code Code de la caméra
+     * @param bool $override
      *
-     * @return int
+     * @return array
      *
      * @throws DownloadException
      */
-    public function downloadFile(string $file, string $code): array
+    public function downloadFile(string $file, string $code, bool $override = false): array
     {
         $directory = __DIR__.'/../../data/downloaded/camera-'.$code;
         $outputFilename = basename($file).'.csv';
         $outputCompleteFilename = $directory.DIRECTORY_SEPARATOR.$outputFilename;
+
+        if (!$override && is_file($outputCompleteFilename)) {
+            throw new DownloadException('Le fichier '.$outputFilename.' a déjà été téléchargé. Je ne le télécharge pas une seconde fois.');
+        }
 
         if (!is_dir($directory) && false === @mkdir($directory)) {
             throw new DownloadException('Impossible de créer le répertoire '.$directory.' pour y télécharger les données anonymisées de la caméra');
