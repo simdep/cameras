@@ -79,7 +79,7 @@ class DownloadCommand extends Command
             ->setDescription('Télécharge et crypte les fichiers d’immatriculations pour les caméras actives.')
 
             //configure option for day to download
-            ->addOption('day', 'd', InputArgument::OPTIONAL, 'Journée à récupérer (all, today, yesterday)', 'yesterday')
+            ->addOption('day', 'd', InputArgument::OPTIONAL, 'Journée à récupérer (all, nottoday, today, yesterday)', 'yesterday')
 
             //Add an option for image to download
             ->addOption('image', 'i', InputArgument::OPTIONAL, 'Mettre à true si vous voulez forcer le téléchargement des images. ATTENTION à la bande passante', false)
@@ -138,16 +138,32 @@ class DownloadCommand extends Command
             if ('all' == $input->getOption('day')) {
                 $output->writeln([
                     sprintf('Interrogation de la caméra « %s »', $camera->getName()),
-                    '    Interrogation de son répertoire de téléchargement : '.$camera->getDirectory(),
+                    '    Interrogation de son répertoire de téléchargement : ' . $camera->getDirectory(),
                 ]);
                 //Try to retrieve an array of files to download
                 try {
                     $files = $this->downloader->getFiles($camera->getDirectory());
                 } catch (DownloadException $e) {
+                    $output->writeln('Erreur à la lecture du répertoire : ' . $e->getMessage());
+                    continue;
+                }
+            }
+            elseif ('nottoday' == $input->getOption('day')) {
+                $output->writeln([
+                    sprintf('Interrogation de la caméra « %s »', $camera->getName()),
+                    '    Interrogation de son répertoire de téléchargement : '.$camera->getDirectory(),
+                ]);
+                //Try to retrieve an array of files to download
+                try {
+                    $files = $this->downloader->getFiles($camera->getDirectory());
+                    //Suppress last day (today)
+                    array_pop($files);
+                } catch (DownloadException $e) {
                     $output->writeln('Erreur à la lecture du répertoire : '.$e->getMessage());
                     continue;
                 }
-            } elseif ('today' == $input->getOption('day')) {
+            }
+            elseif ('today' == $input->getOption('day')) {
                 $today = new \DateTime();
                 $cle = 'ucL1'.$today->format('Y_m_d');
                 $files[$cle] = $camera->getDirectory().$cle;
