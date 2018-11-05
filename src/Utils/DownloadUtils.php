@@ -74,8 +74,8 @@ class DownloadUtils
         $outputFilename = basename($file).'.csv';
         $outputCompleteFilename = $directory.DIRECTORY_SEPARATOR.$outputFilename;
 
-        if (!$override && is_file($outputCompleteFilename)) {
-            throw new DownloadException('Le fichier '.$outputFilename.' a déjà été téléchargé. Je ne le télécharge pas une seconde fois.');
+        if (!$override && is_file($outputCompleteFilename) && filesize($outputCompleteFilename) > 0) {
+            throw new DownloadException('Le fichier '.$outputFilename.' a déjà été téléchargé et n’est pas vide. Je ne le télécharge pas une seconde fois.');
         }
 
         if (!is_dir($directory) && false === @mkdir($directory)) {
