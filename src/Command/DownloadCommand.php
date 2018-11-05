@@ -113,8 +113,7 @@ class DownloadCommand extends Command
 
         // outputs multiple lines to the console (adding "\n" at the end of each line)
         $output->writeln([
-            //TODO Ajouter l'horodatage
-            'Downloader lancé',
+            'Downloader lancé' . strftime("%c"),
             '================',
             'Étape 1 : interrogation de la base de données pour déterminer le nombre de caméras ...',
             '---------',
