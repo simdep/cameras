@@ -18,8 +18,10 @@ namespace App\Command;
 
 use App\Entity\File;
 use App\Entity\Passage;
+use App\Exception\LoadException;
 use App\Repository\CameraRepository;
 use App\Repository\FileRepository;
+use App\Utils\Csv;
 use App\Utils\LoadUtils;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Command\Command;
@@ -36,61 +38,8 @@ class LoadCommand extends Command
     /**
      * Nombre de colonnes.
      */
-    const COLUMN = 49;
+    const COLUMNS = [44, 49]; //On accepte 44 et 49
     const BATCH_SIZE = 2000;
-
-    /**
-     * Position des colonnes en commençant à zéro.
-     */
-    const C_TYPE = 0; //type
-    const C_SN = 1; //SN
-    const C_B = 2; //B
-    const C_J = 3; //J
-    const C_CREATED = 4; //T
-    const C_INCREMENT = 5; //A
-    const C_S = 6; //S
-    const C_PLAQUE_COURT = 7; //P
-    const C_PLAQUE_LONG = 8; //p
-    const C_R = 9; //R
-    const C_FIABILITE = 10; //f
-    const C_COORD = 11; //c
-    const C_H = 12; //H
-    const C_PAYS = 13; //N
-    const C_V = 14; //v
-    const C_IMAGE = 15; //F
-    const C_IMAGE_COULEUR = 16; //Fc
-    const C_FRLV1 = 17; //flrv1
-    const C_FRLV1C = 18; //flrv1c
-    const C_FRLV2 = 19; //flrv2
-    const C_FRLV2C = 20; //flrv2c
-    const C_N = 21; //n
-    const C_O = 22; //o
-    const C_O2 = 23; //O
-    const C_G = 24; //g
-    const C_NATURE_VEHICULE = 25; //l
-    const C_H2 = 26; //h
-    const C_I = 27; //i
-    const C_T = 28; //t
-    const C_D = 29; //D
-    const C_L2 = 30; //L
-    const C_S2 = 31; //s
-    const C_HEIGHT = 31; //height
-    const C_LSD = 32; //lsd
-    const C_SPEEDRNG = 33; //speedrng
-    const C_K = 34; //k
-    const C_LANE = 35; //lane
-    const C_SPEEDEST = 36; //speedest
-    const C_Q = 37; //q
-    const C_BGMEAN = 38; //bgmean
-    const C_FMEAN = 39; //fmean
-    const C_EXP = 40; //exp
-    const C_GAIN = 41; //gain
-    const C_CREJECT = 42; //creject
-    const C_RLVCREJ = 43; //rlvcrej
-    const C_STOPLINE = 44; //stopline
-    const C_RLVLOC = 45; //rlvLoc
-    const C_VC = 46; //Vc
-    const C_VRLVC = 47; //Vrlvc
 
     /**
      * The entity manager.
@@ -289,7 +238,7 @@ class LoadCommand extends Command
                 $this->entityManager->persist($fileEntity);
 
                 $lignes = $this->loader->getLines($fileObject);
-                $output->write(sprintf('<comment>Fichier %s en cours de chargement (%d lignes).</comment> ', $fileInfo->getFilename(), $lignes));
+                $output->writeln(sprintf('<comment>Fichier %s en cours de chargement (%d lignes).</comment> ', $fileInfo->getFilename(), $lignes));
 
                 // creates a new progress bar (50 units)
                 //https://symfony.com/doc/current/components/console/helpers/progressbar.html
@@ -312,29 +261,36 @@ class LoadCommand extends Command
                         ++$index;
                         continue;
                     }
-                    if (self::COLUMN !== count($csv)) {
+                    $columns = count($csv);
+
+                    if (!in_array($columns, self::COLUMNS)) {
                         //On continue car on n'a pas le bon nombre de colonnes.
                         continue;
                     }
 
-                    $passage = new Passage();
-                    $passage
-                        ->setCamera($camera)
-                        ->setCoord($csv[self::C_COORD])
-                        ->setCreated(new \DateTime(substr($csv[self::C_CREATED], 0, -3)))
-                        ->setDataFictive(false)
-                        ->setFiability($csv[self::C_FIABILITE])
-                        ->setFile($fileEntity)
-                        ->setH($csv[self::C_H])
-                        ->setImage($csv[self::C_IMAGE])
-                        ->setImmat($csv[self::C_PLAQUE_COURT])
-                        ->setImmatriculation($csv[self::C_PLAQUE_LONG])
-                        ->setIncrement($csv[self::C_INCREMENT])
-                        ->setL((int) $csv[self::C_NATURE_VEHICULE])
-                        ->setR((int) $csv[self::C_R])
-                        ->setS((int) $csv[self::C_S])
-                        ->setState($csv[self::C_PAYS]);
-                    $this->entityManager->persist($passage);
+                    try {
+                        $passage = new Passage();
+                        $passage
+                            ->setCamera($camera)
+                            ->setCoord($csv[Csv::getColumn("coord",$columns)])
+                            ->setCreated(new \DateTime(substr(Csv::getColumn("created",$columns), 0, -3)))
+                            ->setDataFictive(false)
+                            ->setFiability(Csv::getColumn("fiability",$columns))
+                            ->setFile($fileEntity)
+                            ->setH($csv[Csv::getColumn("h",$columns)])
+                            ->setImage($csv[Csv::getColumn("image",$columns)])
+                            ->setImmat($csv[Csv::getColumn("plaque_court",$columns)])
+                            ->setImmatriculation($csv[Csv::getColumn("plaque_long",$columns)])
+                            ->setIncrement($csv[Csv::getColumn("increment",$columns)])
+                            ->setL((int) $csv[Csv::getColumn("nature_vehicule",$columns)])
+                            ->setR((int) $csv[Csv::getColumn("r",$columns)])
+                            ->setS((int) $csv[Csv::getColumn("s",$columns)])
+                            ->setState($csv[Csv::getColumn("pays",$columns)]);
+                        $this->entityManager->persist($passage);
+                    } catch (LoadException $e) {
+                        $output->writeln(sprintf('<error>Erreur lors du chargement : %s</error> ', $e->getMessage()));
+                        die();
+                    }
                     if (($batchSize % self::BATCH_SIZE) === 0) {
                         $this->entityManager->flush();
                         //$this->entityManager->clear();
