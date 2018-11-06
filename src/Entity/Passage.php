@@ -199,7 +199,7 @@ class Passage
     /**
      * Nom du fichier image en noir et blanc.
      *
-     * @ORM\Column(type="string", length=32, nullable=true)
+     * @ORM\Column(type="string", length=128, nullable=true)
      *
      * @var string
      */
@@ -208,7 +208,7 @@ class Passage
     /**
      * Caméra ayant enregistré ce passage.
      *
-     * @ORM\ManyToOne(targetEntity="App\Entity\Camera", inversedBy="passages")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Camera")
      * @ORM\JoinColumn(name="camera_id", referencedColumnName="id", nullable=false)
      *
      * @var Camera
@@ -218,7 +218,7 @@ class Passage
     /**
      * Fichier dans lequel ce passage est enregistré.
      *
-     * @ORM\ManyToOne(targetEntity="App\Entity\File", inversedBy="passages")
+     * @ORM\ManyToOne(targetEntity="App\Entity\File")
      * @ORM\JoinColumn(name="file_id", referencedColumnName="id", nullable=false)
      *
      * @var File
