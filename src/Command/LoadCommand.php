@@ -284,7 +284,7 @@ class LoadCommand extends Command
 
                 $fileEntity = new File();
                 $fileEntity->setFilename($filename);
-                $fileEntity->setDirectory('data/downloaded');
+                $fileEntity->setDirectory('data/downloaded/camera-'.$camera->getCode());
                 $fileEntity->setMd5sum($empreinte);
                 $this->entityManager->persist($fileEntity);
 
