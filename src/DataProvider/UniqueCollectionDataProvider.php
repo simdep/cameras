@@ -10,7 +10,6 @@
 
 namespace App\DataProvider;
 
-
 use ApiPlatform\Core\DataProvider\CollectionDataProviderInterface;
 use ApiPlatform\Core\DataProvider\RestrictedDataProviderInterface;
 use App\Entity\Passage;
@@ -50,31 +49,31 @@ class UniqueCollectionDataProvider implements CollectionDataProviderInterface, R
 
         //FIXME Transform this manual filters into a dynamic time filters
         if (key_exists('time', $this->filters)) {
-            list($start, $end) = explode("..", $this->filters['time']);
-            $start = min(24,max(0,(int)$start));
-            $end = min(24,max(0,(int)$end));
+            list($start, $end) = explode('..', $this->filters['time']);
+            $start = min(24, max(0, (int) $start));
+            $end = min(24, max(0, (int) $end));
         }
 
         //FIXME Transform this manual filters into a dynamic time filters
         if (key_exists('dates', $this->filters)) {
-            list($startDateString, $endDateString) = explode("..", $this->filters['dates']);
+            list($startDateString, $endDateString) = explode('..', $this->filters['dates']);
             $startDate = new \DateTime();
             $endDate = new \DateTime();
             $startDate->setDate(
-                substr($startDateString,0,4),
-                substr($startDateString,4,2),
-                substr($startDateString,6,2)
+                substr($startDateString, 0, 4),
+                substr($startDateString, 4, 2),
+                substr($startDateString, 6, 2)
                 );
             $endDate->setDate(
-                substr($endDateString,0,4),
-                substr($endDateString,4,2),
-                substr($endDateString,6,2)
+                substr($endDateString, 0, 4),
+                substr($endDateString, 4, 2),
+                substr($endDateString, 6, 2)
                 );
         }
 
         //FIXME Transform this manual filters into a dynamic integer filters
         if (key_exists('itemsPerPage', $this->filters)) {
-            $limit = max(1,min(128, (int)($this->filters['itemsPerPage'])));
+            $limit = max(1, min(128, (int) ($this->filters['itemsPerPage'])));
         }
 
         return $this->repository->{$this->method}($startDate, $endDate, $start, $end, $offset, $limit);
@@ -94,12 +93,15 @@ class UniqueCollectionDataProvider implements CollectionDataProviderInterface, R
         switch ($operationName) {
             case 'get_unique_trucks':
                 $this->method = 'uniqueTrucks';
+
                 return true;
             case 'get_unique_cars':
                 $this->method = 'uniqueCars';
+
                 return true;
             case 'get_unique_unknown':
                 $this->method = 'uniqueUnknown';
+
                 return true;
         }
 

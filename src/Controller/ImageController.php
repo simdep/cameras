@@ -16,7 +16,6 @@
 
 namespace App\Controller;
 
-
 use App\Exception\PassageRepositoryException;
 use App\Repository\PassageRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -24,9 +23,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * Image controller
- *
- * @package App\Controller
+ * Image controller.
  */
 class ImageController
 {
@@ -59,7 +56,7 @@ class ImageController
         $response->setData([
             'immatriculation' => $immatriculation,
             'data' => $data,
-            'error' => $error
+            'error' => $error,
         ]);
 
         return $response;

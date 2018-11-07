@@ -16,7 +16,7 @@
 
 namespace App\Repository;
 
-use \DateTime;
+use DateTime;
 use App\Entity\Passage;
 use App\Exception\PassageRepositoryException;
 use Doctrine\ORM\EntityRepository;
@@ -56,7 +56,6 @@ class PassageRepository extends EntityRepository
             ->where('p.fiability > 90')
             ->andWhere('p.l = 1');
 
-
         try {
             return $qb->getQuery()->getSingleScalarResult();
         } catch (NonUniqueResultException $e) {
@@ -72,7 +71,6 @@ class PassageRepository extends EntityRepository
      * @return string
      *
      * @throws PassageRepositoryException
-     *
      * @throws \Doctrine\ORM\ORMException
      */
     public function getImage(string $immatriculation): string
@@ -85,7 +83,7 @@ class PassageRepository extends EntityRepository
 
         foreach ($passages as $passage) {
             /** @var Passage $passage */
-            $path = __DIR__ . "/../../data/downloaded/camera-{$passage->getCamera()->getCode()}/images/{$passage->getImage()}";
+            $path = __DIR__."/../../data/downloaded/camera-{$passage->getCamera()->getCode()}/images/{$passage->getImage()}";
 
             $info = new \SplFileInfo($path);
 
@@ -93,7 +91,7 @@ class PassageRepository extends EntityRepository
                 $type = pathinfo($path, PATHINFO_EXTENSION);
 
                 $data = file_get_contents($path);
-                $base64 = 'data:image/' . $type . ';base64,' . base64_encode($data);
+                $base64 = 'data:image/'.$type.';base64,'.base64_encode($data);
 
                 return $base64;
             }
@@ -107,10 +105,10 @@ class PassageRepository extends EntityRepository
      *
      * @param DateTime|null $startDate
      * @param DateTime|null $endDate
-     * @param int $start start hour
-     * @param int $end end hour
-     * @param int $offset
-     * @param int $limit nb of element retrieved
+     * @param int           $start     start hour
+     * @param int           $end       end hour
+     * @param int           $offset
+     * @param int           $limit     nb of element retrieved
      *
      * @return Passage[]
      */
@@ -126,10 +124,10 @@ class PassageRepository extends EntityRepository
      *
      * @param DateTime|null $startDate
      * @param DateTime|null $endDate
-     * @param int $start start hour
-     * @param int $end end hour
-     * @param int $offset
-     * @param int $limit nb of element retrieved
+     * @param int           $start     start hour
+     * @param int           $end       end hour
+     * @param int           $offset
+     * @param int           $limit     nb of element retrieved
      *
      * @return Passage[]
      */
@@ -145,10 +143,10 @@ class PassageRepository extends EntityRepository
      *
      * @param DateTime|null $startDate
      * @param DateTime|null $endDate
-     * @param int $start start hour
-     * @param int $end end hour
-     * @param int $offset
-     * @param int $limit nb of element retrieved
+     * @param int           $start     start hour
+     * @param int           $end       end hour
+     * @param int           $offset
+     * @param int           $limit     nb of element retrieved
      *
      * @return Passage[]
      */
@@ -164,17 +162,17 @@ class PassageRepository extends EntityRepository
      *
      * @param DateTime|null $startDate
      * @param DateTime|null $endDate
-     * @param int $start start hour
-     * @param int $end end hour
-     * @param int $offset
-     * @param int $limit nb of element retrieved
+     * @param int           $start     start hour
+     * @param int           $end       end hour
+     * @param int           $offset
+     * @param int           $limit     nb of element retrieved
      *
      * @return array
      */
     protected function searchUniquePassages(int $kind, DateTime $startDate = null, DateTime $endDate = null, int $start = 9, int $end = 15, int $offset = 0, int $limit = 32): array
     {
-        $start = sprintf('%02d', max(0,min(24, $start)));
-        $end = sprintf('%02d', max(0,min(24, $end)));
+        $start = sprintf('%02d', max(0, min(24, $start)));
+        $end = sprintf('%02d', max(0, min(24, $end)));
 
         $subquery = $this->createQueryBuilder('c')
             ->select('1')
@@ -191,19 +189,17 @@ class PassageRepository extends EntityRepository
             ->setParameter('start', $start)
             ->setParameter('end', $end);
 
-
         if (null !== $startDate && null !== $endDate) {
-           $qb
-               ->andWhere("p.created >= :startDate")
-               ->andWhere("p.created <= :endDate")
+            $qb
+               ->andWhere('p.created >= :startDate')
+               ->andWhere('p.created <= :endDate')
                ->setParameter('startDate', $startDate)
                ->setParameter('endDate', $endDate);
         }
 
         $qb->setFirstResult($offset)
            ->setMaxResults($limit)
-            ->orderBy('p.created','ASC');
-
+            ->orderBy('p.created', 'ASC');
 
         $qb->andWhere($qb->expr()->exists($subquery->getDQL()));
 

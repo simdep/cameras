@@ -113,7 +113,7 @@ class DownloadCommand extends Command
 
         // outputs multiple lines to the console (adding "\n" at the end of each line)
         $output->writeln([
-            'Downloader lancé' . strftime("%c"),
+            'Downloader lancé'.strftime('%c'),
             '================',
             'Étape 1 : interrogation de la base de données pour déterminer le nombre de caméras ...',
             '---------',
@@ -138,17 +138,16 @@ class DownloadCommand extends Command
             if ('all' == $input->getOption('day')) {
                 $output->writeln([
                     sprintf('Interrogation de la caméra « %s »', $camera->getName()),
-                    '    Interrogation de son répertoire de téléchargement : ' . $camera->getDirectory(),
+                    '    Interrogation de son répertoire de téléchargement : '.$camera->getDirectory(),
                 ]);
                 //Try to retrieve an array of files to download
                 try {
                     $files = $this->downloader->getFiles($camera->getDirectory());
                 } catch (DownloadException $e) {
-                    $output->writeln('Erreur à la lecture du répertoire : ' . $e->getMessage());
+                    $output->writeln('Erreur à la lecture du répertoire : '.$e->getMessage());
                     continue;
                 }
-            }
-            elseif ('nottoday' == $input->getOption('day')) {
+            } elseif ('nottoday' == $input->getOption('day')) {
                 $output->writeln([
                     sprintf('Interrogation de la caméra « %s »', $camera->getName()),
                     '    Interrogation de son répertoire de téléchargement : '.$camera->getDirectory(),
@@ -162,8 +161,7 @@ class DownloadCommand extends Command
                     $output->writeln('Erreur à la lecture du répertoire : '.$e->getMessage());
                     continue;
                 }
-            }
-            elseif ('today' == $input->getOption('day')) {
+            } elseif ('today' == $input->getOption('day')) {
                 $today = new \DateTime();
                 $cle = 'ucL1'.$today->format('Y_m_d');
                 $files[$cle] = $camera->getDirectory().$cle;

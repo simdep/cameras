@@ -60,9 +60,9 @@ class DownloadUtils
     /**
      * Télécharge un fichier de passage et anonymise à la volée les plaques d'immatriculation.
      *
-     * @param string $file Fichier à télécharger
-     * @param string $code Code de la caméra
-     * @param bool $override
+     * @param string $file     Fichier à télécharger
+     * @param string $code     Code de la caméra
+     * @param bool   $override
      *
      * @return array
      *
@@ -201,18 +201,20 @@ class DownloadUtils
 
     /**
      * @param string $immatriculation
+     *
      * @return string
      */
     public function simplify(string $immatriculation): string
     {
         $convert = [
-            "O" => "0",
-            "Q" => "0",
-            "I" => "1",
-            "S" => "5",
-            "B" => "8",
-            "-" => ""
+            'O' => '0',
+            'Q' => '0',
+            'I' => '1',
+            'S' => '5',
+            'B' => '8',
+            '-' => '',
         ];
+
         return strtr($immatriculation, $convert);
     }
 }

@@ -16,7 +16,6 @@
 
 namespace App\Controller;
 
-
 use App\Repository\CameraRepository;
 use App\Repository\PassageRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -24,9 +23,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * Statistic controller
- *
- * @package App\Controller
+ * Statistic controller.
  */
 class StatisticController
 {
@@ -36,6 +33,7 @@ class StatisticController
      * @Route("/api/statistics", name="statistic")
      *
      * @param EntityManagerInterface $em
+     *
      * @return JsonResponse
      */
     public function allStatistics(EntityManagerInterface $em): JsonResponse
@@ -55,7 +53,7 @@ class StatisticController
             'activeCameras' => $activeCamera,
             'passages' => $totalPassage,
             'camions' => $totalCamion,
-            'cameras' => $totalCamera
+            'cameras' => $totalCamera,
         ]);
 
         return $response;
@@ -66,6 +64,7 @@ class StatisticController
      * @Route("/api/statistics/camera", name="statistic_camera")
      *
      * @param EntityManagerInterface $em
+     *
      * @return JsonResponse
      */
     public function cameraCount(EntityManagerInterface $em): JsonResponse
@@ -81,13 +80,14 @@ class StatisticController
             'active' => $active,
         ]);
 
-       return $response;
+        return $response;
     }
 
     /**
      * @Route("/api/passages/count", name="statistic_passage")
      *
      * @param EntityManagerInterface $em
+     *
      * @return JsonResponse
      */
     public function passageCount(EntityManagerInterface $em): JsonResponse
@@ -101,13 +101,14 @@ class StatisticController
             'total' => $total,
         ]);
 
-       return $response;
+        return $response;
     }
 
     /**
      * @Route("/api/passages/countCamion", name="statistic_camion")
      *
      * @param EntityManagerInterface $em
+     *
      * @return JsonResponse
      */
     public function camionCount(EntityManagerInterface $em): JsonResponse
@@ -121,6 +122,6 @@ class StatisticController
             'total' => $total,
         ]);
 
-       return $response;
+        return $response;
     }
 }

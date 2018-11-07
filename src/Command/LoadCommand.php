@@ -157,14 +157,13 @@ class LoadCommand extends Command
 
         //Set memory limit.
         if ('y' === $input->getOption('memory_limit')) {
-            @ini_set("memory_limit",-1);
+            @ini_set('memory_limit', -1);
         }
 
         //On débute une transaction
         if ('f' !== $input->getOption('transaction') && 'n' !== $input->getOption('transaction')) {
             $this->entityManager->beginTransaction();
         }
-
 
         //Optimisation : on désactive le log des requêtes
         $this->entityManager->getConnection()->getConfiguration()->setSQLLogger(null);
@@ -272,27 +271,27 @@ class LoadCommand extends Command
                         $passage = new Passage();
                         $passage
                             ->setCamera($camera)
-                            ->setCoord($csv[Csv::getColumn("coord",$columns)])
-                            ->setCreated(new \DateTime(substr(Csv::getColumn("created",$columns), 0, -3)))
+                            ->setCoord($csv[Csv::getColumn('coord', $columns)])
+                            ->setCreated(new \DateTime(substr(Csv::getColumn('created', $columns), 0, -3)))
                             ->setDataFictive(false)
-                            ->setFiability(Csv::getColumn("fiability",$columns))
+                            ->setFiability(Csv::getColumn('fiability', $columns))
                             ->setFile($fileEntity)
-                            ->setH($csv[Csv::getColumn("h",$columns)])
-                            ->setImage($csv[Csv::getColumn("image",$columns)])
-                            ->setImmat($csv[Csv::getColumn("plaque_court",$columns)])
-                            ->setImmatCollision($csv[Csv::getColumn("plaque_collision",$columns)])
-                            ->setImmatriculation($csv[Csv::getColumn("plaque_long",$columns)])
-                            ->setIncrement($csv[Csv::getColumn("increment",$columns)])
-                            ->setL((int) $csv[Csv::getColumn("nature_vehicule",$columns)])
-                            ->setR((int) $csv[Csv::getColumn("r",$columns)])
-                            ->setS((int) $csv[Csv::getColumn("s",$columns)])
-                            ->setState($csv[Csv::getColumn("pays",$columns)]);
+                            ->setH($csv[Csv::getColumn('h', $columns)])
+                            ->setImage($csv[Csv::getColumn('image', $columns)])
+                            ->setImmat($csv[Csv::getColumn('plaque_court', $columns)])
+                            ->setImmatCollision($csv[Csv::getColumn('plaque_collision', $columns)])
+                            ->setImmatriculation($csv[Csv::getColumn('plaque_long', $columns)])
+                            ->setIncrement($csv[Csv::getColumn('increment', $columns)])
+                            ->setL((int) $csv[Csv::getColumn('nature_vehicule', $columns)])
+                            ->setR((int) $csv[Csv::getColumn('r', $columns)])
+                            ->setS((int) $csv[Csv::getColumn('s', $columns)])
+                            ->setState($csv[Csv::getColumn('pays', $columns)]);
                         $this->entityManager->persist($passage);
                     } catch (LoadException $e) {
                         $output->writeln(sprintf('<error>Erreur lors du chargement : %s</error> ', $e->getMessage()));
                         die();
                     }
-                    if (($batchSize % self::BATCH_SIZE) === 0) {
+                    if (0 === ($batchSize % self::BATCH_SIZE)) {
                         $this->entityManager->flush();
                         //$this->entityManager->clear();
                     }

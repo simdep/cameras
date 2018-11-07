@@ -21,7 +21,6 @@ use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\BooleanFilter;
 
-
 /**
  * Caméra.
  *
@@ -282,7 +281,7 @@ class Camera
      */
     public function hasCoordonnees(): bool
     {
-        return (null !== $this->latitude && null !== $this->longitude);
+        return null !== $this->latitude && null !== $this->longitude;
     }
 
     /**
@@ -313,6 +312,7 @@ class Camera
      * Setter de la latitude.
      *
      * @param float $latitude
+     *
      * @return Camera
      */
     public function setLatitude(?float $latitude): Camera
@@ -326,6 +326,7 @@ class Camera
      * Setter de la longitude.
      *
      * @param float $longitude
+     *
      * @return Camera
      */
     public function setLongitude(?float $longitude): Camera

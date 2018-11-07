@@ -10,7 +10,6 @@
 
 namespace App\Utils;
 
-
 use App\Exception\LoadException;
 
 class Csv
@@ -120,60 +119,63 @@ class Csv
 
     /**
      * @param string $column
-     * @param int $columns
+     * @param int    $columns
+     *
      * @return int
+     *
      * @throws LoadException
      */
     public static function getColumn(string $column, int $columns = 45)
     {
         switch ($column) {
-            case "coord":
+            case 'coord':
                 return Csv::is4445($columns) ? self::C_44_COORD : self::C_49_COORD;
-            case "created":
+            case 'created':
                 return Csv::is4445($columns) ? self::C_44_CREATED : self::C_49_CREATED;
-            case "fiability":
+            case 'fiability':
                 return Csv::is4445($columns) ? self::C_44_FIABILITE : self::C_49_FIABILITE;
-            case "h":
+            case 'h':
                 return Csv::is4445($columns) ? self::C_44_H : self::C_49_H;
-            case "image":
+            case 'image':
                 return Csv::is4445($columns) ? self::C_44_IMAGE : self::C_49_IMAGE;
-            case "plaque_collision":
+            case 'plaque_collision':
                 return Csv::getPlaqueCollision($columns);
-            case "plaque_court":
+            case 'plaque_court':
                 return Csv::is4445($columns) ? self::C_44_PLAQUE_COURT : self::C_49_PLAQUE_COURT;
-            case "plaque_long":
+            case 'plaque_long':
                 return Csv::is4445($columns) ? self::C_44_PLAQUE_LONG : self::C_49_PLAQUE_LONG;
-            case "increment":
+            case 'increment':
                 return Csv::is4445($columns) ? self::C_44_INCREMENT : self::C_49_INCREMENT;
-            case "nature_vehicule":
+            case 'nature_vehicule':
                 return Csv::is4445($columns) ? self::C_44_NATURE_VEHICULE : self::C_49_NATURE_VEHICULE;
-            case "r":
+            case 'r':
                 return Csv::is4445($columns) ? self::C_44_R : self::C_49_R;
-            case "s":
+            case 's':
                 return Csv::is4445($columns) ? self::C_44_S : self::C_49_S;
-            case "pays":
+            case 'pays':
                 return Csv::is4445($columns) ? self::C_44_PAYS : self::C_49_PAYS;
             default:
-                throw new LoadException("Code inconnu :" . $column);
+                throw new LoadException('Code inconnu :'.$column);
         }
-
     }
 
     /**
      * Retourne vrai si 44 ou 45 colonnes.
      *
      * @param $columns
+     *
      * @return bool
      */
     private static function is4445($columns): bool
     {
-        return $columns == 45 || $columns == 44;
+        return 45 == $columns || 44 == $columns;
     }
 
     /**
      * Retourne la colonne de la plaque d'immatriculation simplifiée ou la plaque courte si je n'ai pas pu le simplifier.
      *
      * @param $columns
+     *
      * @return int
      */
     private static function getPlaqueCollision($columns): int

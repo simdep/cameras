@@ -56,7 +56,7 @@ class AnomalieType
     private $pays;
 
     /**
-     * Nombre de types distincts. (1, 2 ou 3)
+     * Nombre de types distincts. (1, 2 ou 3).
      *
      * @ORM\Column(type="integer", nullable=false)
      *

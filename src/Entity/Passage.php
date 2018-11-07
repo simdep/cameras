@@ -406,6 +406,7 @@ class Passage
     {
         return self::TRUCK === $this->l;
     }
+
     /**
      * Indique s'il s'agit d'une donnée fictive ou non.
      *
@@ -513,6 +514,7 @@ class Passage
      * Cette donnée a préalablement été hashée, par conséquent on n'a jamais la véritable plaque.
      *
      * @param string $immatCollision
+     *
      * @return Passage
      */
     public function setImmatCollision(string $immatCollision): Passage
