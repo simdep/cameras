@@ -31,6 +31,7 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
  *     indexes={
  *         @ORM\Index(name="ndx_passage_immatriculation", columns={"immatriculation"}),
  *         @ORM\Index(name="ndx_passage_immat", columns={"immat"}),
+ *         @ORM\Index(name="ndx_passage_immat_collision", columns={"immat_collision"}),
  *         @ORM\Index(name="ndx_passage_fiability", columns={"fiability"}),
  *         @ORM\Index(name="ndx_passage_fictive", columns={"data_fictive"}),
  *         @ORM\Index(name="ndx_file_primary", columns={"file_id"}),
@@ -106,7 +107,7 @@ class Passage
     private $s;
 
     /**
-     * Plaque d'immatriculation anonymisée.
+     * Plaque d'immatriculation avec tiret anonymisée.
      *
      * La plaque d'immatriculation est anonymisée via un algorithme de hachage après un salage de la plaque.
      *
@@ -117,7 +118,7 @@ class Passage
     private $immatriculation;
 
     /**
-     * Plaque d'immatriculation anonymisée.
+     * Plaque d'immatriculation sans tiret anonymisée.
      *
      * La plaque d'immatriculation est anonymisée via un algorithme de hachage après un salage de la plaque.
      *
@@ -126,6 +127,17 @@ class Passage
      * @var string
      */
     private $immat;
+
+    /**
+     * Plaque d'immatriculation anonymisée après remplacement des O par des 0, des i par des 1, etc.
+     *
+     * La plaque d'immatriculation est anonymisée via un algorithme de hachage après un salage de la plaque.
+     *
+     * @ORM\Column(type="string", length=64, nullable=false)
+     *
+     * @var string
+     */
+    private $immatCollision;
 
     /**
      * Variable inconnue r.
@@ -276,13 +288,23 @@ class Passage
     }
 
     /**
-     * Retourne la plaque d'immatriculation anonymisée selon l'autre format, celui avec les séparateurs.
+     * Retourne la plaque d'immatriculation anonymisée selon l'autre format, celui sans les séparateurs.
      *
      * @return string
      */
     public function getImmat(): ?string
     {
         return $this->immat;
+    }
+
+    /**
+     * Retourne la plaque d'immatriculation anonymisée après avoir transformé les O en 0, etc.
+     *
+     * @return string
+     */
+    public function getImmatCollision(): ?string
+    {
+        return $this->immatCollision;
     }
 
     /**
@@ -461,7 +483,7 @@ class Passage
      *
      * @return Passage
      */
-    public function setImmatriculation(string $immatriculation): Passage
+    public function setImmatriculation(?string $immatriculation = null): Passage
     {
         $this->immatriculation = $immatriculation;
 
@@ -485,9 +507,25 @@ class Passage
     }
 
     /**
+     * Définit l'immatriculation.
+     * Il s'agissait de l'immatriculation dont on avait remplacé les O par des 0, 1 et i,I par des L, etc.
+     *
+     * Cette donnée a préalablement été hashée, par conséquent on n'a jamais la véritable plaque.
+     *
+     * @param string $immatCollision
+     * @return Passage
+     */
+    public function setImmatCollision(string $immatCollision): Passage
+    {
+        $this->immatCollision = $immatCollision;
+
+        return $this;
+    }
+
+    /**
      * Définit le type de véhicule.
      *
-     * @param int $r
+     * @param int $l
      *
      * @return Passage
      */

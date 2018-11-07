@@ -44,12 +44,12 @@ class DownloadUtilsTest extends TestCase
     public function testGetFile()
     {
         $expected = [
-            'fichier1.txt' => __DIR__.'/../example1.htmlfichier1.txt',
-            'fichier3.txt' => __DIR__.'/../example1.htmlfichier3.txt',
-            'fichier4.txt' => __DIR__.'/../example1.htmlfichier4.txt',
+            'fichier1.txt' => __DIR__ . '/../example1.htmlfichier1.txt',
+            'fichier3.txt' => __DIR__ . '/../example1.htmlfichier3.txt',
+            'fichier4.txt' => __DIR__ . '/../example1.htmlfichier4.txt',
         ];
 
-        $actual = $this->downloadUtils->getFiles(__DIR__.'/../example1.html');
+        $actual = $this->downloadUtils->getFiles(__DIR__ . '/../example1.html');
         self::assertEquals($expected, $actual);
     }
 
@@ -62,7 +62,7 @@ class DownloadUtilsTest extends TestCase
     {
         $expected = [];
 
-        $actual = $this->downloadUtils->getFiles(__DIR__.'/../empty.html');
+        $actual = $this->downloadUtils->getFiles(__DIR__ . '/../empty.html');
         self::assertEquals($expected, $actual);
     }
 
@@ -77,5 +77,25 @@ class DownloadUtilsTest extends TestCase
         self::expectExceptionMessage('Impossible de lire le contenu du répertoire d’archive de la caméra.');
 
         $this->downloadUtils->getFiles('non-valide.txt');
+    }
+
+    /**
+     * Test immatriculation simplification.
+     *
+     */
+    public function testSimplify()
+    {
+        $tests = [
+            "-" => "",
+            "AA555CC" => "AA555CC",
+            "SS555BB" => "5555588",
+            "COQ" => "C00",
+            "1234567" => "1234567",
+            "OISBOISB" => "01580158"
+        ];
+
+        foreach ($tests as $actual => $expected) {
+            self::assertEquals($expected, $this->downloadUtils->simplify($actual));
+        }
     }
 }

@@ -93,6 +93,8 @@ class DownloadUtils
         $images = [];
         $row = 1;
         while (false !== ($data = fgetcsv($inputFile, 0, "\t"))) {
+            //On crée une nouvelle colonne, on doit le faire AVANT le cryptage de la plaque.
+            $data['PC'] = $this->simplify($data['p']);
             if (1 == $row) {
                 //Première ligne j'aoute les entêtes
                 $line = $this->header($data);
@@ -150,6 +152,7 @@ class DownloadUtils
         foreach ($data as $line) {
             list($key, $value) = explode('=', $line);
             switch ($key) {
+                case 'PC':
                 case 'P':
                 case 'p':
                     $resultat[$key] = $cryptage($value.'un sel crystallisé');
@@ -194,5 +197,22 @@ class DownloadUtils
         }
 
         return @copy($originFile, $destinationFile);
+    }
+
+    /**
+     * @param string $immatriculation
+     * @return string
+     */
+    public function simplify(string $immatriculation): string
+    {
+        $convert = [
+            "O" => "0",
+            "Q" => "0",
+            "I" => "1",
+            "S" => "5",
+            "B" => "8",
+            "-" => ""
+        ];
+        return strtr($immatriculation, $convert);
     }
 }

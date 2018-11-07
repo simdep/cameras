@@ -16,7 +16,7 @@ use App\Exception\LoadException;
 class Csv
 {
     /**
-     * Position des colonnes en commençant à zéro pour un fichier de 49 colonnes.
+     * Position des colonnes en commençant à zéro pour un fichier de 49 colonnes (ou 50).
      */
     const C_49_TYPE = 0; //type
     const C_49_SN = 1; //SN
@@ -67,9 +67,10 @@ class Csv
     const C_49_RLVLOC = 45; //rlvLoc
     const C_49_VC = 46; //Vc
     const C_49_VRLVC = 47; //Vrlvc
+    const C_49_PLAQUE_COLLISION = 48; //Vrlvc
 
     /**
-     * Position des colonnes en commençant à zéro.
+     * Position des colonnes en commençant à zéro pour un fichier de 44 colonnes ou 45 colonnes.
      */
     const C_44_TYPE = 0; //type
     const C_44_B = 1; //B
@@ -115,6 +116,7 @@ class Csv
     const C_44_RLVLOC = 41; //rlvLoc
     const C_44_VC = 42; //Vc
     const C_44_VRLVC = 43; //Vrlvc
+    const C_44_PLAQUE_COLLISION = 44; //Vrlvc
 
     /**
      * @param string $column
@@ -122,35 +124,69 @@ class Csv
      * @return int
      * @throws LoadException
      */
-    public static function getColumn(string $column, int $columns=44) {
-        switch($column) {
+    public static function getColumn(string $column, int $columns = 45)
+    {
+        switch ($column) {
             case "coord":
-                return $columns == 44 ? self::C_44_COORD : self::C_49_COORD;
+                return Csv::is4445($columns) ? self::C_44_COORD : self::C_49_COORD;
             case "created":
-                return $columns == 44 ? self::C_44_CREATED : self::C_49_CREATED;
+                return Csv::is4445($columns) ? self::C_44_CREATED : self::C_49_CREATED;
             case "fiability":
-                return $columns == 44 ? self::C_44_FIABILITE : self::C_49_FIABILITE;
+                return Csv::is4445($columns) ? self::C_44_FIABILITE : self::C_49_FIABILITE;
             case "h":
-                return $columns == 44 ? self::C_44_H : self::C_49_H;
+                return Csv::is4445($columns) ? self::C_44_H : self::C_49_H;
             case "image":
-                return $columns == 44 ? self::C_44_IMAGE : self::C_49_IMAGE;
+                return Csv::is4445($columns) ? self::C_44_IMAGE : self::C_49_IMAGE;
+            case "plaque_collision":
+                return Csv::getPlaqueCollision($columns);
             case "plaque_court":
-                return $columns == 44 ? self::C_44_PLAQUE_COURT : self::C_49_PLAQUE_COURT;
+                return Csv::is4445($columns) ? self::C_44_PLAQUE_COURT : self::C_49_PLAQUE_COURT;
             case "plaque_long":
-                return $columns == 44 ? self::C_44_PLAQUE_LONG : self::C_49_PLAQUE_LONG;
+                return Csv::is4445($columns) ? self::C_44_PLAQUE_LONG : self::C_49_PLAQUE_LONG;
             case "increment":
-                return $columns == 44 ? self::C_44_INCREMENT : self::C_49_INCREMENT;
+                return Csv::is4445($columns) ? self::C_44_INCREMENT : self::C_49_INCREMENT;
             case "nature_vehicule":
-                return $columns == 44 ? self::C_44_NATURE_VEHICULE : self::C_49_NATURE_VEHICULE;
+                return Csv::is4445($columns) ? self::C_44_NATURE_VEHICULE : self::C_49_NATURE_VEHICULE;
             case "r":
-                return $columns == 44 ? self::C_44_R : self::C_49_R;
+                return Csv::is4445($columns) ? self::C_44_R : self::C_49_R;
             case "s":
-                return $columns == 44 ? self::C_44_S : self::C_49_S;
+                return Csv::is4445($columns) ? self::C_44_S : self::C_49_S;
             case "pays":
-                return $columns == 44 ? self::C_44_PAYS : self::C_49_PAYS;
+                return Csv::is4445($columns) ? self::C_44_PAYS : self::C_49_PAYS;
             default:
                 throw new LoadException("Code inconnu :" . $column);
         }
-        
+
+    }
+
+    /**
+     * Retourne vrai si 44 ou 45 colonnes.
+     *
+     * @param $columns
+     * @return bool
+     */
+    private static function is4445($columns): bool
+    {
+        return $columns == 45 || $columns == 44;
+    }
+
+    /**
+     * Retourne la colonne de la plaque d'immatriculation simplifiée ou la plaque courte si je n'ai pas pu le simplifier.
+     *
+     * @param $columns
+     * @return int
+     */
+    private static function getPlaqueCollision($columns): int
+    {
+        switch ($columns) {
+            case 44:
+                return self::C_44_PLAQUE_COURT;
+            case 45:
+                return self::C_44_PLAQUE_COLLISION;
+            case 49:
+                return self::C_49_PLAQUE_COURT;
+            default:
+                return self::C_49_PLAQUE_COLLISION;
+        }
     }
 }

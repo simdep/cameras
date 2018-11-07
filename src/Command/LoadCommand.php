@@ -38,7 +38,7 @@ class LoadCommand extends Command
     /**
      * Nombre de colonnes.
      */
-    const COLUMNS = [44, 49]; //On accepte 44 et 49
+    const COLUMNS = [44, 45, 49, 50]; //On accepte 44 et 49, et on a ajouté une colonne
     const BATCH_SIZE = 2000;
 
     /**
@@ -280,6 +280,7 @@ class LoadCommand extends Command
                             ->setH($csv[Csv::getColumn("h",$columns)])
                             ->setImage($csv[Csv::getColumn("image",$columns)])
                             ->setImmat($csv[Csv::getColumn("plaque_court",$columns)])
+                            ->setImmatCollision($csv[Csv::getColumn("plaque_collision",$columns)])
                             ->setImmatriculation($csv[Csv::getColumn("plaque_long",$columns)])
                             ->setIncrement($csv[Csv::getColumn("increment",$columns)])
                             ->setL((int) $csv[Csv::getColumn("nature_vehicule",$columns)])
