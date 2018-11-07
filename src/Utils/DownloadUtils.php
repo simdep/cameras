@@ -60,13 +60,14 @@ class DownloadUtils
     /**
      * Télécharge un fichier de passage et anonymise à la volée les plaques d'immatriculation.
      *
-     * @param string $file     Fichier à télécharger
-     * @param string $code     Code de la caméra
-     * @param bool   $override
+     * @param string $file Fichier à télécharger
+     * @param string $code Code de la caméra
+     * @param bool $override
      *
      * @return array
      *
      * @throws DownloadException
+     * @throws \App\Exception\LoadException
      */
     public function downloadFile(string $file, string $code, bool $override = false): array
     {
@@ -94,7 +95,7 @@ class DownloadUtils
         $row = 1;
         while (false !== ($data = fgetcsv($inputFile, 0, "\t"))) {
             //On crée une nouvelle colonne, on doit le faire AVANT le cryptage de la plaque.
-            $data['PC'] = $this->simplify($data['p']);
+            $data[] = $this->simplify($data[Csv::getColumn("plaque",count($data))]);
             if (1 == $row) {
                 //Première ligne j'aoute les entêtes
                 $line = $this->header($data);
