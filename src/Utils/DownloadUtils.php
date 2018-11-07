@@ -95,7 +95,7 @@ class DownloadUtils
         $row = 1;
         while (false !== ($data = fgetcsv($inputFile, 0, "\t"))) {
             //On crée une nouvelle colonne, on doit le faire AVANT le cryptage de la plaque.
-            $data[] = $this->simplify($data[Csv::getColumn("plaque",count($data))]);
+            $data[] = $this->simplify($data[Csv::getColumn("plaque_court",count($data))]);
             if (1 == $row) {
                 //Première ligne j'aoute les entêtes
                 $line = $this->header($data);
