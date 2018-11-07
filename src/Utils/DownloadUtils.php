@@ -95,7 +95,6 @@ class DownloadUtils
         $row = 1;
         while (false !== ($data = fgetcsv($inputFile, 0, "\t"))) {
             //On crée une nouvelle colonne, on doit le faire AVANT le cryptage de la plaque.
-            $data[] = $this->simplify($data[Csv::getColumn("plaque_court",count($data))]);
             if (1 == $row) {
                 //Première ligne j'aoute les entêtes
                 $line = $this->header($data);
@@ -151,19 +150,23 @@ class DownloadUtils
         $cryptage = 'sha1';
 
         foreach ($data as $line) {
+            $tampon = "";
             list($key, $value) = explode('=', $line);
             switch ($key) {
-                case 'PC':
                 case 'P':
+                    $resultat[$key] = $cryptage($value.'un sel crystallisé');
+                    break;
                 case 'p':
                     $resultat[$key] = $cryptage($value.'un sel crystallisé');
+                    $tampon = $cryptage($this->simplify($value).'un sel crystallisé');
                     break;
                 default:
                     $resultat[$key] = $value;
             }
+            $resultat['PC'] = $tampon;
         }
 
-        if (count($data) !== count($resultat)) {
+        if ((count($data)+1) !== count($resultat)) {
             die('error');
         }
 
