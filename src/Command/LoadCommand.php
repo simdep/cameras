@@ -264,7 +264,6 @@ class LoadCommand extends Command
 
                     if (!in_array($columns, self::COLUMNS)) {
                         //On continue car on n'a pas le bon nombre de colonnes.
-                        $output->writeln(sprintf('<info>% colonnes, je passe.</info>', $columns));
                         continue;
                     }
 
