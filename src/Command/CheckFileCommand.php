@@ -110,21 +110,21 @@ class CheckFileCommand extends Command
             '<info>================</info>',
         ]);
 
-        $directoryname = __DIR__.'/../../data/downloaded/';
-        $directoryInfo = new \SplFileInfo($directoryname);
+        $directoryName = __DIR__.'/../../data/downloaded/';
+        $directoryInfo = new \SplFileInfo($directoryName);
 
         if (!$directoryInfo->isDir()) {
-            $output->writeln(sprintf('<error>%s n’est pas un répertoire</error>', $directoryname));
+            $output->writeln(sprintf('<error>%s n’est pas un répertoire</error>', $directoryName));
             return 2;
         }
 
         if (!$directoryInfo->isReadable()) {
-            $output->writeln(sprintf('<error>Le répertoire %s n’est pas lisible</error>', $directoryname));
+            $output->writeln(sprintf('<error>Le répertoire %s n’est pas lisible</error>', $directoryName));
             return 3;
         }
 
-        foreach (scandir($directoryname) as $subDirectory) {
-            $subDirectoryInfo = new \SplFileInfo($directoryname.'/' . $subDirectory);
+        foreach (scandir($directoryName) as $subDirectory) {
+            $subDirectoryInfo = new \SplFileInfo($directoryName.'/' . $subDirectory);
 
 
             //on élimine les répertoires qui ne commencent pas par camera-
@@ -134,7 +134,7 @@ class CheckFileCommand extends Command
             }
 
             foreach (scandir($subDirectoryInfo) as $file) {
-                $fileInfo = new \SplFileInfo($directoryname . '/' . $subDirectory . '/' . $file);
+                $fileInfo = new \SplFileInfo($directoryName . '/' . $subDirectory . '/' . $file);
 
                 //on ne garde que les fichiers csv
                 if ('csv' !== $fileInfo->getExtension()) {
@@ -175,7 +175,7 @@ class CheckFileCommand extends Command
             $output->writeln(sprintf('<comment>Mémoire consommée : %s</comment>', memory_get_usage()));
 
             //Fermeture du répertoire
-            unset($directoryInfo, $directoryname);
+            unset($directoryInfo);
         }
         $output->writeln('Fin du processus.');
 
