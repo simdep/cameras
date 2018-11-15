@@ -80,5 +80,15 @@ class CameraRepository extends EntityRepository
         }
     }
 
-
+    /**
+     * Retourne les caméras actives.
+     *
+     * @param $id
+     *
+     * @return Camera|null
+     */
+    public function findById($id): ?Camera
+    {
+        return $this->findOneBy(['id' => $id]);
+    }
 }
