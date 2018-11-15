@@ -273,9 +273,9 @@ class LoadCommand extends Command
                         $passage
                             ->setCamera($camera)
                             ->setCoord($csv[$header->getColumn('coord')])
-                            ->setCreated(new \DateTime(substr($header->getColumn('created'), 0, -3)))
+                            ->setCreated(new \DateTime(substr($csv[$header->getColumn('created')], 0, -3)))
                             ->setDataFictive(false)
-                            ->setFiability($header->getColumn('fiability'))
+                            ->setFiability($csv[$header->getColumn('fiability')])
                             ->setFile($fileEntity)
                             ->setH($csv[$header->getColumn('h')])
                             ->setImage($csv[$header->getColumn('image')])
