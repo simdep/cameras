@@ -29,11 +29,6 @@ class CheckFileCommand extends Command
     use LockableTrait;
 
     /**
-     * Nombre de colonnes.
-     */
-    const COLUMNS = [44, 45, 49, 50]; //On accepte 44 et 49, et on a ajouté une colonne
-
-    /**
      * The file repository.
      *
      * @var FileRepository
@@ -93,7 +88,7 @@ class CheckFileCommand extends Command
      * @param InputInterface  $input
      * @param OutputInterface $output
      *
-     * @return int|null|void null or 0 if everything went fine, or an error code
+     * @return int|null null or 0 if everything went fine, or an error code
      *
      * @throws \Exception
      */
@@ -169,7 +164,7 @@ class CheckFileCommand extends Command
                     $max = max( $columns, $max);
                 }
 
-                $output->writeln(sprintf('<info>Fichier %s analysé (%d lignes, %d colonnes minimales, %d colonnes maximales).</info> ', $fileInfo->getFilename(), $lignes, $min, $max));
+                $output->writeln(sprintf('<info>Fichier %s/%s analysé (%d lignes, %d colonnes minimales, %d colonnes maximales).</info> ', $directoryName, $fileInfo->getFilename(), $lignes, $min, $max));
             }
 
             $output->writeln(sprintf('<comment>Mémoire consommée : %s</comment>', memory_get_usage()));
@@ -182,5 +177,6 @@ class CheckFileCommand extends Command
         // if not released explicitly, Symfony releases the lock
         // automatically when the execution of the command ends
         $this->release();
+        return 0;
     }
 }

@@ -21,7 +21,7 @@ use App\Entity\Passage;
 use App\Exception\LoadException;
 use App\Repository\CameraRepository;
 use App\Repository\FileRepository;
-use App\Utils\Csv;
+use App\Utils\Header;
 use App\Utils\LoadUtils;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Command\Command;
@@ -121,11 +121,11 @@ class LoadCommand extends Command
      * @param InputInterface  $input
      * @param OutputInterface $output
      *
-     * @return int|null|void
+     * @return int|null
      *
      * @throws \Exception
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): ?int
     {
         if (!$this->lock()) {
             $output->writeln('<error>The command is already running in another process.</error>');
@@ -150,9 +150,9 @@ class LoadCommand extends Command
                 '<info>--------</info>',
             ]);
         } else {
-            $output->writeln('<error>Aucune caméra à interroger. Fin du processus.</error>');
+            $output->writeln('<info>Aucune caméra à interroger. Fin du processus.</info>');
 
-            return;
+            return 0;
         }
 
         //Set memory limit.
@@ -255,37 +255,42 @@ class LoadCommand extends Command
                         //fichier ou ligne vide
                         continue;
                     }
-                    if (0 === $index) {
-                        //On passe l’entête.
-                        ++$index;
-                        continue;
-                    }
-                    $columns = count($csv);
-
-                    if (!in_array($columns, self::COLUMNS)) {
-                        //On continue car on n'a pas le bon nombre de colonnes.
-                        continue;
-                    }
-
                     try {
+                        if (0 === $index) {
+                            //On passe l’entête.
+                            $header = new Header($csv);
+                            ++$index;
+                            continue;
+                        }
+                        $columns = count($csv);
+
+                        if (!in_array($columns, self::COLUMNS)) {
+                            //On continue car on n'a pas le bon nombre de colonnes.
+                            continue;
+                        }
+
                         $passage = new Passage();
                         $passage
                             ->setCamera($camera)
-                            ->setCoord($csv[Csv::getColumn('coord', $columns)])
-                            ->setCreated(new \DateTime(substr(Csv::getColumn('created', $columns), 0, -3)))
+                            ->setCoord($csv[$header->getColumn('coord')])
+                            ->setCreated(new \DateTime(substr($header->getColumn('created'), 0, -3)))
                             ->setDataFictive(false)
-                            ->setFiability(Csv::getColumn('fiability', $columns))
+                            ->setFiability($header->getColumn('fiability'))
                             ->setFile($fileEntity)
-                            ->setH($csv[Csv::getColumn('h', $columns)])
-                            ->setImage($csv[Csv::getColumn('image', $columns)])
-                            ->setImmat($csv[Csv::getColumn('plaque_court', $columns)])
-                            ->setImmatCollision($csv[Csv::getColumn('plaque_collision', $columns)])
-                            ->setImmatriculation($csv[Csv::getColumn('plaque_long', $columns)])
-                            ->setIncrement($csv[Csv::getColumn('increment', $columns)])
-                            ->setL((int) $csv[Csv::getColumn('nature_vehicule', $columns)])
-                            ->setR((int) $csv[Csv::getColumn('r', $columns)])
-                            ->setS((int) $csv[Csv::getColumn('s', $columns)])
-                            ->setState($csv[Csv::getColumn('pays', $columns)]);
+                            ->setH($csv[$header->getColumn('h')])
+                            ->setImage($csv[$header->getColumn('image')])
+                            ->setImmat($csv[$header->getColumn('plaque_court')])
+                            ->setImmatriculation($csv[$header->getColumn('plaque_long')])
+                            ->setIncrement($csv[$header->getColumn('increment')])
+                            ->setL((int) $csv[$header->getColumn('nature_vehicule')])
+                            ->setR((int) $csv[$header->getColumn('r')])
+                            ->setS((int) $csv[$header->getColumn('s')])
+                            ->setState($csv[$header->getColumn('pays')]);
+                        if (isset($csv[$header->getColumn('plaque_collision')])) {
+                            $passage->setImmatCollision($csv[$header->getColumn('plaque_collision')]);
+                        } else {
+                            $passage->setImmatCollision($csv[$header->getColumn('plaque_court')]);
+                        }
                         $this->entityManager->persist($passage);
                     } catch (LoadException $e) {
                         $output->writeln(sprintf('<error>Erreur lors du chargement : %s</error> ', $e->getMessage()));
@@ -324,5 +329,6 @@ class LoadCommand extends Command
         // if not released explicitly, Symfony releases the lock
         // automatically when the execution of the command ends
         $this->release();
+        return 0;
     }
 }
