@@ -39,7 +39,7 @@ class LoadCommand extends Command
      * Nombre de colonnes.
      */
     const COLUMNS = [44, 45, 49, 50]; //On accepte 44 et 49, et on a ajouté une colonne
-    const BATCH_SIZE = 2000;
+    const BATCH_SIZE = 42000;
 
     /**
      * The entity manager.
@@ -108,6 +108,9 @@ class LoadCommand extends Command
 
             //Add an option for reload file already loaded
             ->addOption('memory_limit', 'm', InputArgument::OPTIONAL, 'Laisser PHP utiliser la quantité de mémoire souhaitée ? (y/n)', 'y')
+
+            //Add an option for reload file already loaded
+            ->addOption('fetch', 'f', InputArgument::OPTIONAL, 'Nombre de lignes entre chaque transmission à la base de données', self::BATCH_SIZE)
 
             // the full command description shown when running the command with
             // the "--help" option
@@ -296,7 +299,7 @@ class LoadCommand extends Command
                         $output->writeln(sprintf('<error>Erreur lors du chargement : %s</error> ', $e->getMessage()));
                         die();
                     }
-                    if (0 === ($batchSize % self::BATCH_SIZE)) {
+                    if (0 === ($batchSize % $input->getOption('fetch'))) {
                         $this->entityManager->flush();
                         //$this->entityManager->clear();
                     }

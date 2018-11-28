@@ -67,7 +67,6 @@ class DownloadUtils
      * @return array
      *
      * @throws DownloadException
-     * @throws \App\Exception\LoadException
      */
     public function downloadFile(string $file, string $code, bool $override = false): array
     {
@@ -76,27 +75,30 @@ class DownloadUtils
         $outputCompleteFilename = $directory.DIRECTORY_SEPARATOR.$outputFilename;
 
         if (!$override && is_file($outputCompleteFilename) && filesize($outputCompleteFilename) > 0) {
-            throw new DownloadException('Le fichier '.$outputFilename.' a déjà été téléchargé et n’est pas vide. Je ne le télécharge pas une seconde fois.');
+            throw new DownloadException('Le fichier '.$outputFilename.' a déjà été téléchargé et n’est pas vide. Je ne le télécharge pas une seconde fois.', DownloadException::WARNING);
         }
 
         if (!is_dir($directory) && false === @mkdir($directory)) {
-            throw new DownloadException('Impossible de créer le répertoire '.$directory.' pour y télécharger les données anonymisées de la caméra');
+            throw new DownloadException('Impossible de créer le répertoire '.$directory.' pour y télécharger les données anonymisées de la caméra', DownloadException::ERROR);
         }
 
         if (false === ($outputFile = @fopen($outputCompleteFilename, 'w+'))) {
-            throw new DownloadException('Impossible d’ouvrir le fichier '.$outputCompleteFilename.' pour y écrire les données à télécharger.');
+            throw new DownloadException('Impossible d’ouvrir le fichier '.$outputCompleteFilename.' pour y écrire les données à télécharger.', DownloadException::ERROR);
         }
 
         if (false === ($inputFile = @fopen($file, 'r'))) {
-            throw new DownloadException('Impossible de lire le fichier distant '.$file);
+            throw new DownloadException('Impossible de lire le fichier distant '.$file, DownloadException::ERROR);
         }
 
         $images = [];
         $row = 1;
         while (false !== ($data = fgetcsv($inputFile, 0, "\t"))) {
+            if (null === $data) {
+                continue;
+            }
             //On crée une nouvelle colonne, on doit le faire AVANT le cryptage de la plaque.
             if (1 == $row) {
-                //Première ligne j'aoute les entêtes
+                //Première ligne j'ajoute les entêtes
                 $line = $this->header($data);
                 fwrite($outputFile, implode("\t", $line)."\r\n");
                 unset($line);

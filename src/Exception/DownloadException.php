@@ -21,4 +21,6 @@ namespace App\Exception;
  */
 class DownloadException extends \Exception
 {
+    const WARNING = 10;
+    const ERROR = 20;
 }

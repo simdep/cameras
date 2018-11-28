@@ -179,7 +179,12 @@ class DownloadCommand extends Command
                     $lines = $this->downloader->downloadFile($file, $camera->getCode(), $input->getOption('override'));
                     $output->writeln(sprintf('           %s passages anonymisés et récupérées', count($lines)));
                 } catch (DownloadException $e) {
-                    $output->writeln('Erreur : '.$e->getMessage());
+                    if (DownloadException::WARNING === $e->getCode()) {
+                        $output->writeln('<info>Erreur : '.$e->getMessage().'</info>');
+                    } else {
+                        $output->writeln('<error>Erreur : '.$e->getMessage().'</error>');
+                    }
+
                     continue;
                 }
 
