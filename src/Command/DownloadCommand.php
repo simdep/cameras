@@ -180,18 +180,18 @@ class DownloadCommand extends Command
                     $output->writeln(sprintf('           %s passages anonymisés et récupérées', count($lines)));
                 } catch (DownloadException $e) {
                     if (DownloadException::WARNING === $e->getCode()) {
-                        $output->writeln("\t\t".'<info>Erreur : '.$e->getMessage().'</info>');
+                        $output->writeln("\t\t".'<info>Info : '.$e->getMessage().'</info>');
                     } else {
                         $output->writeln('<error>Erreur : '.$e->getMessage().'</error>');
-                    }
-                    //FIXME supprimer le fichier !!!
-                    $directory = __DIR__.'/../../data/downloaded/camera-'.$camera->getCode();
-                    $outputFilename = basename($file).'.csv';
-                    $outputCompleteFilename = $directory.DIRECTORY_SEPARATOR.$outputFilename;
-                    $fileToDelete = new \SplFileInfo($outputCompleteFilename);
-                    if ($fileToDelete->isFile()) {
-                        $output->writeln("\t\t".'<info>Suppression du fichier erroné</info>');
-                        unlink($outputCompleteFilename);
+                        //Supprimer le fichier s’il existe.
+                        $directory = __DIR__.'/../../data/downloaded/camera-'.$camera->getCode();
+                        $outputFilename = basename($file).'.csv';
+                        $outputCompleteFilename = $directory.DIRECTORY_SEPARATOR.$outputFilename;
+                        $fileToDelete = new \SplFileInfo($outputCompleteFilename);
+                        if ($fileToDelete->isFile()) {
+                            $output->writeln("\t\t".'<info>Suppression du fichier erroné</info>');
+                            unlink($outputCompleteFilename);
+                        }
                     }
 
                     continue;
