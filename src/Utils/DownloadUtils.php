@@ -105,7 +105,11 @@ class DownloadUtils
             }
             $line = $this->format($data);
             fwrite($outputFile, implode("\t", $line)."\r\n");
-            $images[$row] = [$line['F'], $line['Fc']];
+            if (key_exists('F', $line) && key_exists('Fc', $line)) {
+                $images[$row] = [$line['F'], $line['Fc']];
+            }else {
+                throw new DownloadException('Colonnes erronées dans '.$file.'. Soit le téléchargement a été interrompu, soit le FW de la caméra n’est pas connu.', DownloadException::ERROR);
+            }
             ++$row;
             unset($line, $data);
         }
